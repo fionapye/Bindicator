@@ -1,10 +1,12 @@
 # colour config
-
-
 import os
 import json
 
 os.chdir("/home/pi/Documents/Bindicator/config")
+
+def write_json (filename, data):
+    with open(filename, 'w') as outfile:
+        json.dump(data, outfile)
 
 led_colours = {
     "pink" : {"r":255, "g":0, "b":140, "br":0.1},
@@ -13,6 +15,12 @@ led_colours = {
     "grey" : {"r":15, "g":15, "b":15, "br":0.2},
     "brown" : {"r":25, "g":10, "b":1, "br":0.2},
     "black" : {"r":2, "g":0, "b":2, "br":0.2}
+    }
+
+bins = {
+    "general" : ['brown'],
+    "recycling" : ['pink','pink','grey','grey','black','black','blue','blue'],
+    "green" : ["green"]
     }
 
 days = {
@@ -25,9 +33,6 @@ days = {
     "Sunday" : 'Sun'
     }
 
-with open('led_colours.json', 'w') as outfile:
-    json.dump(led_colours, outfile)
-
-with open('days.json', 'w') as outfile:
-    json.dump(days,outfile)
-
+write_json('led_colours.json', led_colours)
+write_json('days.json', days)
+write_json('bins.json', bins)
