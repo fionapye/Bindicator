@@ -29,16 +29,24 @@ def leds_off():
     blinkt.clear()
     blinkt.show()
 
-
+# load data
 led_colours = read_json('/home/pi/Documents/Bindicator/config/led_colours.json')  # load colour data
 days = read_json('/home/pi/Documents/Bindicator/config/days.json')  # load days data
 bins = read_json('/home/pi/Documents/Bindicator/config/bins.json')
-
 urlpage = read_json('/home/pi/Documents/Bindicator/urlpath/path.json')  # load url for bin collection
+
+# webscraping
 page = urllib.request.urlopen(urlpage.get('urlpath'))
 soup = BeautifulSoup(page, 'html.parser')
 table = soup.find_all('table', attrs={'class':'multitable'})
-table
+
+table.find('tr')
+
+print(data)
+    
+
+bin_types = table.find_all('tr')
+print(bin_types)
 
 # weekdays as a tuple
 weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
