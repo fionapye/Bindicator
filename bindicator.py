@@ -1,16 +1,34 @@
 import blinkt
 import numpy as np
 import datetime
+import time
+from bs4 import BeautifulSoup
+import urllib.request
+
+
+## Data Setup
+#Webscrape
+urlpage = 
+page = urllib.request.urlopen(urlpage)
+soup = BeautifulSoup(page, 'html.parser')
+
+table = soup.find_all('table', attrs={'class':'multitable'})
+print('Number of results', len(table))
+table
 
 # weekdays as a tuple
 weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
+
+# Get days
 binday = "Thursday"
 bins_out = "Wednesday"
 
+#bin colours
 #display colours
-pinkr,pinkg,pinkb = (255,0,140)
-bluer,blueg,blueb = (0,145,255)
-#greenr,greeng,greenb = (23,146,23)
+pinkr,pinkg,pinkb,pinkbr = (255,0,140,0.2)
+bluer,blueg,blueb, bluebr = (0,145,255,0.2)
+blackr,blackg,blackb = (2,0,2)
+greenr,greeng,greenb = (23,146,5)
 greyr,greyg,greyb = (15,15,15)
 brownr,browng,brownb = (25,10,1)
 
@@ -29,30 +47,23 @@ tomorrow_day = weekDays[tomorrow_num]
 #remove, for real version
 today_day = 'Wednesday'
 tomorrow_day = 'Thursday'
-bintype = 1
+bintype = 0
 
 print(f'The day today is {today_day}')
 
-#if tomorrow_day == binday:
-#    print (f'Yes, today is {today_day} and {tomorrow_day} is binday')
-#    blinkt.clear()
-#    blinkt.set_all(0, 128, 128)
-#    blinkt.show()  
-#else:
-#    print (f'No tomorrow, {tomorrow_day}, is not binday')
-#    blinkt.clear()
-#    blinkt.show()
     
 if tomorrow_day == binday:
     print (f'Yes, today is {today_day} and {tomorrow_day} is binday')
     blinkt.clear()
     if bintype == 0:  # recycling
-        blinkt.set_pixel(0,pinkr,pinkg,pinkb)
-        blinkt.set_pixel(1,pinkr,pinkg,pinkb)
-        blinkt.set_pixel(4,bluer,blueg,blueb)
-        blinkt.set_pixel(5,bluer,blueg,blueb)
-        blinkt.set_pixel(6,greyr,greyg,greyb)
-        blinkt.set_pixel(7,greyr,greyg,greyb)
+        blinkt.set_pixel(0,pinkr,pinkg,pinkb, brightness = pinkbr)
+        blinkt.set_pixel(1,pinkr,pinkg,pinkb, brightness = pinkbr)
+        blinkt.set_pixel(4,blackr,blackg,blackb)
+        blinkt.set_pixel(5,blackr,blackg,blackb)
+        blinkt.set_pixel(6,bluer,blueg,blueb, brightness = bluebr)
+        blinkt.set_pixel(7,bluer,blueg,blueb, brightness = bluebr)
+        blinkt.set_pixel(2,greyr,greyg,greyb)
+        blinkt.set_pixel(3,greyr,greyg,greyb)
         blinkt.show()
     elif bintype == 1:  # general
         blinkt.set_all(brownr,browng,brownb)
@@ -64,3 +75,9 @@ else:
     print (f'No tomorrow, {tomorrow_day}, is not binday')
     blinkt.clear()
     blinkt.show()
+
+time.sleep(5)
+blinkt.clear()
+blinkt.show()
+
+    
