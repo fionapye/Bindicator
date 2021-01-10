@@ -2,9 +2,17 @@ import blinkt
 import numpy as np
 import datetime
 import time
-from bs4 import BeautifulSoup
-import urllib.request
 import json
+import os
+import platform
+import requests
+import lxml.html
+
+# paths between platforms
+if platform.system() == 'Windows':
+    wdir = 'D:\\GitHub\\Bindicator'
+elif platform.system() == 'Linux':
+    wdir = '/home/pi/Documents/Bindicator'
 
 # function to read in json data
 def read_json (path):
@@ -30,23 +38,27 @@ def leds_off():
     blinkt.show()
 
 # load data
-led_colours = read_json('/home/pi/Documents/Bindicator/config/led_colours.json')  # load colour data
-days = read_json('/home/pi/Documents/Bindicator/config/days.json')  # load days data
-bins = read_json('/home/pi/Documents/Bindicator/config/bins.json')
-urlpage = read_json('/home/pi/Documents/Bindicator/urlpath/path.json')  # load url for bin collection
+
+led_colours = read_json(os.path.join(wdir,'config','led_colours.json'))  # load colour data
+days = read_json(os.path.join(wdir,'config','days.json')) 
+bins = read_json(os.path.join(wdir,'config','bins.json'))
+urlpage = read_json(os.path.join(wdir,'urlpath','path.json'))  # load url for bin collection
+
+#led_colours = read_json('/home/pi/Documents/Bindicator/config/led_colours.json')  # load colour data
+#days = read_json('/home/pi/Documents/Bindicator/config/days.json')  # load days data
+#bins = read_json('/home/pi/Documents/Bindicator/config/bins.json')
+#urlpage = read_json('/home/pi/Documents/Bindicator/urlpath/path.json')  # load url for bin collection
 
 # webscraping
-page = urllib.request.urlopen(urlpage.get('urlpath'))
-soup = BeautifulSoup(page, 'html.parser')
-table = soup.find_all('table', attrs={'class':'multitable'})
+html = requests.get(urlpage.get('urlpath'))
+doc = lxml.html.fromstring(html.content)
+recycling_date = doc.xpath('/html/body/div[2]/div/div/form/table/tbody/tr[1]/td[1]/div/text()')
+green_date = doc.xpath('/html/body/div[2]/div/div/form/table/tbody/tr[2]/td[1]/div/text()')
+general_date = doc.xpath('/html/body/div[2]/div/div/form/table/tbody/tr[3]/td[1]/div/text()')
 
-table.find('tr')
+recycling_day = recycling_date[0].split(' ')[0]
 
-print(data)
-    
 
-bin_types = table.find_all('tr')
-print(bin_types)
 
 # weekdays as a tuple
 weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
