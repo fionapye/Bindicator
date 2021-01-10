@@ -42,6 +42,13 @@ days = {
     "Sunday" : 'Sun'
     }
 
+xpaths ={
+    'recycling' : '/html/body/div[2]/div/div/form/table/tbody/tr[1]/td[1]/div',
+    'green' : '/html/body/div[2]/div/div/form/table/tbody/tr[2]/td[1]/div',
+    'general' : '/html/body/div[2]/div/div/form/table/tbody/tr[3]/td[1]/div'
+}
+
 write_json('led_colours.json', led_colours)
 write_json('days.json', days)
 write_json('bins.json', bins)
+write_json('xpaths.json', xpaths)

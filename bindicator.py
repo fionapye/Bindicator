@@ -22,6 +22,13 @@ def read_json (path):
         data = json.load(json_file)
     return data
 
+# webscraping
+def webscrape(url):
+    # webscraping
+    html = requests.get(urlpage.get(url))
+    doc = lxml.html.fromstring(html.content)
+    return doc
+
  # function to test the vaildity of scraped day
 def day_validity_test(scr_day):
     for day in days:
@@ -73,30 +80,41 @@ led_colours = read_json(os.path.join(wdir,'config','led_colours.json'))  # load 
 days = read_json(os.path.join(wdir,'config','days.json')) 
 bins = read_json(os.path.join(wdir,'config','bins.json'))
 urlpage = read_json(os.path.join(wdir,'urlpath','path.json'))  # load url for bin collection
+xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))
 
 #led_colours = read_json('/home/pi/Documents/Bindicator/config/led_colours.json')  # load colour data
 #days = read_json('/home/pi/Documents/Bindicator/config/days.json')  # load days data
 #bins = read_json('/home/pi/Documents/Bindicator/config/bins.json')
 #urlpage = read_json('/home/pi/Documents/Bindicator/urlpath/path.json')  # load url for bin collection
 
-# webscraping
-html = requests.get(urlpage.get('urlpath'))
-doc = lxml.html.fromstring(html.content)
+doc = webscrape(urlpage.get('urlpath'))
 
-xpaths ={
-    'recycling' : '/html/body/div[2]/div/div/form/table/tbody/tr[1]/td[1]/div',
-    'green' : '/html/body/div[2]/div/div/form/table/tbody/tr[2]/td[1]/div',
-    'general' : '/html/body/div[2]/div/div/form/table/tbody/tr[3]/td[1]/div'
-}
 
+bindays = []
 for type in xpaths:
-    print(type)
-    dayabr, date, weekday = info_extract(xpaths.get(type))
+    data = [type] # get the name into a list
+    data.append(info_extract(xpaths.get(type))) # attach data to names
+    bindays.append(data) #put all the data together
 
-dayabr, date, weekday = info_extract(xpaths.get('green'))
+today_date = datetime.date.today()
+tomorrow_date = today_date + datetime.timedelta(days = 1) 
 
-if x == True:
-    print('yes')
+#for testing
+today_date = datetime.datetime.strptime('13012021', "%d%m%Y").date()
+tomorrow_date = today_date + datetime.timedelta(days = 1) 
+
+typeout = []
+for type in bindays:
+    print(type[0])
+    print(type[1][1])
+    bintype = type[0]
+    binday = type[1][1]
+    if tomorrow_date == binday:
+        data = [bintype,binday]
+        typeout.append(data)
+    else:
+        print('false')
+
 # weekdays as a tuple
 weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
 
@@ -105,7 +123,6 @@ binday = "Thursday"
 bins_out = "Wednesday"
 
 today_date = datetime.date.today()  # get the date of today
-
 today_num = today_date.weekday()  # get the day today
 
 if today_num == 6:
