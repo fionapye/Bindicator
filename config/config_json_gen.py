@@ -1,8 +1,17 @@
 # colour config
 import os
 import json
+import platform
 
-os.chdir("/home/pi/Documents/Bindicator/config")
+# paths between platforms
+if platform.system() == 'Windows':
+    wdir = 'D:\\GitHub\\Bindicator'
+elif platform.system() == 'Linux':
+    wdir = '/home/pi/Documents/Bindicator'
+
+
+os.chdir(os.path.join(wdir,'config'))
+#os.chdir("/home/pi/Documents/Bindicator/config")
 
 def write_json (filename, data):
     with open(filename, 'w') as outfile:
@@ -25,9 +34,9 @@ bins = {
 
 days = {
     "Monday" : 'Mon',
-    "Tuesday" : 'Tue',
+    "Tuesday" : 'Tues',
     "Wednesday" : 'Wed',
-    "Thursday" : 'Thur',
+    "Thursday" : 'Thurs',
     "Friday" : 'Fri',
     "Saturday" : 'Sat',
     "Sunday" : 'Sun'

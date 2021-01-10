@@ -2,6 +2,8 @@ import blinkt
 import numpy as np
 import datetime
 import time
+import datetime
+from time import strptime
 import json
 import os
 import platform
@@ -56,10 +58,42 @@ recycling_date = doc.xpath('/html/body/div[2]/div/div/form/table/tbody/tr[1]/td[
 green_date = doc.xpath('/html/body/div[2]/div/div/form/table/tbody/tr[2]/td[1]/div/text()')
 general_date = doc.xpath('/html/body/div[2]/div/div/form/table/tbody/tr[3]/td[1]/div/text()')
 
-recycling_day = recycling_date[0].split(' ')[0]
+xpaths ={
+    'recycling' : '/html/body/div[2]/div/div/form/table/tbody/tr[1]/td[1]/div',
+    'green' : '/html/body/div[2]/div/div/form/table/tbody/tr[2]/td[1]/div',
+    'general' : '/html/body/div[2]/div/div/form/table/tbody/tr[3]/td[1]/div'
+}
+
+def info_extract(xpath_value):
+    date = doc.xpath(xpath_value + '/text()')
+    date_str = date[0].split(' ')
+    print(date_str)
+    mon = str(strptime(date_str[2],'%b').tm_mon)
+    if len(month) == 1:
+        mon = mon.zfill(2)
+    if len(date_str[1]) == 1:
+        day = day.zfill(2)
+    else:
+        day = date_str[1]
+    datenum = str(day+mon+date_str[3])
+    print(datenum)
+    binday_date = datetime.datetime.strptime(datenum, "%d%m%Y").date()
+    bin_weekday = binday.weekday()
+    print(binday)
+    print(f'{binday.weekday()}')
+
+info_extract(xpaths.get('recycling'))
 
 
+#for day in days:
+ #   print(days.get(day))
+#    if days.get(day) == recycling_day_abr:
+#        recycling_day = day
+#        print(day)
+#    else:
+#        print('no')
 
+    
 # weekdays as a tuple
 weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
 
@@ -71,7 +105,7 @@ today_date = datetime.date.today()  # get the date of today
 
 today_num = today_date.weekday()  # get the day today
 
-if today_num == 7:
+if today_num == 6:
     tomorrow_num = 0
 else:
     tomorrow_num = today_num + 1
