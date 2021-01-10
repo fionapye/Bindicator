@@ -192,7 +192,7 @@ tomorrow_date = today_date + datetime.timedelta(days = 1)
 # work out if any bins go out today
 binsout = bins_out(bindays)
 
-#for testing purposes, comment out when testing complete
+#for testing purposes, comment out when testing complete. maybe add demo function?
 binsout_recy = [['recycling', datetime.date(2021, 1, 14)]]
 binsout_gen = [['general', datetime.date(2021, 1, 14)]]
 binsout_green = [['green', datetime.date(2021, 1, 14)]]
@@ -201,6 +201,13 @@ binsout_two_b = [['recycling', datetime.date(2021, 1, 14)], ['general', datetime
 binsout_two_c = [['green', datetime.date(2021, 1, 14)], ['general', datetime.date(2021, 1, 14)]]
 binsout_three = [['recycling', datetime.date(2021, 1, 14)], ['green', datetime.date(2021, 1, 14)], ['general', datetime.date(2021, 1, 14)] ]
 
+
+bindicate(binsout_recy)
+time.sleep(5)
+bindicate(binsout_gen)
+time.sleep(5)
+bindicate(binsout_green)
+time.sleep(5)
 bindicate(binsout_two_a)
 time.sleep(5)
 bindicate(binsout_two_b)
