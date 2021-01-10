@@ -193,6 +193,9 @@ tomorrow_date = today_date + datetime.timedelta(days = 1)
 binsout = bins_out(bindays)
 
 #for testing purposes, comment out when testing complete
+binsout_recy = [['recycling', datetime.date(2021, 1, 14)]]
+binsout_gen = [['general', datetime.date(2021, 1, 14)]]
+binsout_green = [['green', datetime.date(2021, 1, 14)]]
 binsout_two_a = [['recycling', datetime.date(2021, 1, 14)], ['green', datetime.date(2021, 1, 14)]]
 binsout_two_b = [['recycling', datetime.date(2021, 1, 14)], ['general', datetime.date(2021, 1, 14)]]
 binsout_two_c = [['green', datetime.date(2021, 1, 14)], ['general', datetime.date(2021, 1, 14)]]
