@@ -10,6 +10,7 @@ import platform
 import requests
 import lxml.html
 
+
 # paths between platforms (webscrape and parsing developed in windows)
 def gen_wdir():
     if platform.system() == 'Windows':
@@ -18,11 +19,13 @@ def gen_wdir():
         wdir = '/home/pi/Documents/Bindicator'
     return wdir
 
+
 # function to read in json data
 def read_json (path):
     with open(path) as json_file:
         data = json.load(json_file)
     return data
+
 
 # webscraping
 def webscrape(url):
@@ -30,6 +33,7 @@ def webscrape(url):
     html = requests.get(url)
     doc = lxml.html.fromstring(html.content)
     return doc
+
 
  # function to test the vaildity of scraped day
 def day_validity_test(scr_day):
@@ -60,6 +64,7 @@ def info_extract(xpath_value):
         info = [None, None, None]
         return info
 
+
 # function to get the bindays into a list 
 def get_bindays(xpaths):
     bindays = []
@@ -69,12 +74,29 @@ def get_bindays(xpaths):
         bindays.append(data) #put all the data together
     return bindays
 
+
 # get timedate data for today and tomorrow to compare against scraped data
 def gen_today_tomorrow():
     today_date = datetime.date.today()
     tomorrow_date = today_date + datetime.timedelta(days = 1)
     return [today_date, tomorrow_date]
 
+
+# function to define which bins to go out today
+def bins_out (bindays):
+    typeout = []
+    for type in bindays:
+        #print(type[0])
+        #print(type[1][1])
+        bintype = type[0]
+        binday = type[1][1]
+        if tomorrow_date == binday:
+            data = [bintype,binday]
+            typeout.append(data)
+            print(f'{bintype} to go out today')
+        else:
+            print('No bins to go out today')
+    return typeout
 
 
 # function to light up leds individually 
@@ -83,19 +105,23 @@ def one_led (led,col):
     blinkt.set_pixel(led,colr.get('r'), colr.get('g'), colr.get('b'), colr.get('br') )  # insert rgb values and brightness
     blinkt.show()
 
+
 # function to light up all leds in one colour
 def all_led (col):
     colr = led_colours.get(col)  # get pixel colour settings from dictionary
     blinkt.set_all(colr.get('r'), colr.get('g'), colr.get('b'), colr.get('br'))  # insert rgb values and brightness
     blinkt.show()  # display leds
-    
+
+
 # function to turn off all leds
 def leds_off():
     blinkt.clear()
     blinkt.show()
 
 
-# process start
+
+###########################
+# run process
 
 # generate working directory
 wdir = gen_wdir() 
@@ -110,24 +136,20 @@ xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))  # load xpaths for
 # get the bindays from the website
 bindays = get_bindays(xpaths) 
 
-# get datetime data for comparison
+# get current date data for comparison with website
 today_date, tomorrow_date = gen_today_tomorrow()
 
 #for testing purposes, comment out when testing complete
 today_date = datetime.datetime.strptime('13012021', "%d%m%Y").date()
 tomorrow_date = today_date + datetime.timedelta(days = 1) 
 
-typeout = []
-for type in bindays:
-    print(type[0])
-    print(type[1][1])
-    bintype = type[0]
-    binday = type[1][1]
-    if tomorrow_date == binday:
-        data = [bintype,binday]
-        typeout.append(data)
-    else:
-        print('false')
+# work out if any bins go out today
+binsout = bins_out(bindays)
+
+# need to test for multiple types on one day, later upgrade make process work first
+
+if len(binsout) >= 1 :  # if binsout has value 
+    #turn on lights
 
 # weekdays as a tuple
 weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
