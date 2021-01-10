@@ -81,6 +81,12 @@ def gen_today_tomorrow():
     tomorrow_date = today_date + datetime.timedelta(days = 1)
     return [today_date, tomorrow_date]
 
+#function to get dayname from input date
+def get_dayname(date):
+    # weekdays as a tuple
+    weekdays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
+    return weekdays[date.weekday()]
+
 
 # function to define which bins to go out today
 def bins_out (bindays):
@@ -90,12 +96,15 @@ def bins_out (bindays):
         #print(type[1][1])
         bintype = type[0]
         binday = type[1][1]
-        if tomorrow_date == binday:
-            data = [bintype,binday]
-            typeout.append(data)
-            print(f'{bintype} to go out today')
+        if binday: 
+            if tomorrow_date == binday:
+                data = [bintype,binday]
+                typeout.append(data)
+                print(f'{bintype.title()} bin(s) to go out today as tomorrow is {get_dayname(tomorrow_date)}')
+            else:
+                print(f'{bintype.title()} bin(s) don\'t need to go out today as it is {get_dayname(today_date)}')
         else:
-            print('No bins to go out today')
+            print(f'No data available for the collection of {bintype.title()} bin(s)')
     return typeout
 
 
@@ -146,13 +155,13 @@ tomorrow_date = today_date + datetime.timedelta(days = 1)
 # work out if any bins go out today
 binsout = bins_out(bindays)
 
+#get_dayname(tomorrow_date)
+
 # need to test for multiple types on one day, later upgrade make process work first
 
 if len(binsout) >= 1 :  # if binsout has value 
     #turn on lights
 
-# weekdays as a tuple
-weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
 
 # Get days
 binday = "Thursday"
