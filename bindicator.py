@@ -131,7 +131,7 @@ def leds_off():
 # need to test for multiple types on one day, later upgrade make process work first
 
 def bindicate(binsout):
-    if len(binsout) >= 1:  # if binsout has value 
+    if len(binsout) == 1:  # if binsout has value 
         print('lights')
         blinkt.clear()
         if binsout[0][0] == 'recycling':  # recycling
@@ -145,6 +145,18 @@ def bindicate(binsout):
         else:
             print (f'Bin(s) don\'t need to go out today as it is {get_dayname(today_date)}')
             leds_off()
+    elif len(binsout) == 2:
+        # recycling and general
+        if (binsout[0][0] == 'recycling' or binsout[1][0] == 'recycling') and (binsout[0][0] == 'general' or binsout[1][0] == 'general'):
+            pass
+        # recycling and green
+        elif (binsout[0][0] == 'recycling' or binsout[1][0] == 'recycling') and (binsout[0][0] == 'green' or binsout[1][0] == 'green'):
+            pass
+        # general and green
+        elif (binsout[0][0] == 'general' or binsout[1][0] == 'general') and (binsout[0][0] == 'green' or binsout[1][0] == 'green'):
+            pass
+    elif len(binsout) == 3:
+        pass
     else:
         print('no lights')
         leds_off()
