@@ -10,11 +10,13 @@ import platform
 import requests
 import lxml.html
 
-# paths between platforms
-if platform.system() == 'Windows':
-    wdir = 'D:\\GitHub\\Bindicator'
-elif platform.system() == 'Linux':
-    wdir = '/home/pi/Documents/Bindicator'
+# paths between platforms (webscrape and parsing developed in windows)
+def gen_wdir():
+    if platform.system() == 'Windows':
+        wdir = 'D:\\GitHub\\Bindicator'
+    elif platform.system() == 'Linux':
+        wdir = '/home/pi/Documents/Bindicator'
+    return wdir
 
 # function to read in json data
 def read_json (path):
@@ -25,7 +27,7 @@ def read_json (path):
 # webscraping
 def webscrape(url):
     # webscraping
-    html = requests.get(urlpage.get(url))
+    html = requests.get(url)
     doc = lxml.html.fromstring(html.content)
     return doc
 
@@ -40,22 +42,40 @@ def day_validity_test(scr_day):
     return test
 
 
-# function to parse date data from xpath
+# function to parse date data from website
 def info_extract(xpath_value):
+    doc = webscrape(urlpage.get('urlpath'))
     date = doc.xpath(xpath_value + '/text()') # get the text from the xpath location
     date_str = date[0].split(' ') # split  the text on spaces
-    valid_date = day_validity_test(date_str[0])
+    valid_date = day_validity_test(date_str[0]) # test is an allowed value
     if valid_date:
-        print(date_str)
+        #print(date_str)
         mon = str(strptime(date_str[2],'%b').tm_mon) # turn month into numeric form
         datenum = str(date_str[1]+mon+date_str[3]) # generate numeric date string for conversion
-        print(datenum)  
+        #print(datenum)  
         binday_date = datetime.datetime.strptime(datenum, "%d%m%Y").date() # convert to datetime format
         info = [date_str[0],binday_date, binday_date.weekday()] # list for ouput
         return info
     else:
         info = [None, None, None]
         return info
+
+# function to get the bindays into a list 
+def get_bindays(xpaths):
+    bindays = []
+    for type in xpaths:
+        data = [type] # get the name into a list
+        data.append(info_extract(xpaths.get(type))) # attach data to names
+        bindays.append(data) #put all the data together
+    return bindays
+
+# get timedate data for today and tomorrow to compare against scraped data
+def gen_today_tomorrow():
+    today_date = datetime.date.today()
+    tomorrow_date = today_date + datetime.timedelta(days = 1)
+    return [today_date, tomorrow_date]
+
+
 
 # function to light up leds individually 
 def one_led (led,col):
@@ -74,32 +94,26 @@ def leds_off():
     blinkt.clear()
     blinkt.show()
 
-# load data
 
-led_colours = read_json(os.path.join(wdir,'config','led_colours.json'))  # load colour data
-days = read_json(os.path.join(wdir,'config','days.json')) 
-bins = read_json(os.path.join(wdir,'config','bins.json'))
+# process start
+
+# generate working directory
+wdir = gen_wdir() 
+
+# load all the data stored in json
+led_colours = read_json(os.path.join(wdir,'config','led_colours.json'))  # load colour data (rgb)
+days = read_json(os.path.join(wdir,'config','days.json')) #load days data
+bins = read_json(os.path.join(wdir,'config','bins.json')) #load bins colour data
 urlpage = read_json(os.path.join(wdir,'urlpath','path.json'))  # load url for bin collection
-xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))
+xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))  # load xpaths for webscrape (maybe merge with urlpage?)
 
-#led_colours = read_json('/home/pi/Documents/Bindicator/config/led_colours.json')  # load colour data
-#days = read_json('/home/pi/Documents/Bindicator/config/days.json')  # load days data
-#bins = read_json('/home/pi/Documents/Bindicator/config/bins.json')
-#urlpage = read_json('/home/pi/Documents/Bindicator/urlpath/path.json')  # load url for bin collection
+# get the bindays from the website
+bindays = get_bindays(xpaths) 
 
-doc = webscrape(urlpage.get('urlpath'))
+# get datetime data for comparison
+today_date, tomorrow_date = gen_today_tomorrow()
 
-
-bindays = []
-for type in xpaths:
-    data = [type] # get the name into a list
-    data.append(info_extract(xpaths.get(type))) # attach data to names
-    bindays.append(data) #put all the data together
-
-today_date = datetime.date.today()
-tomorrow_date = today_date + datetime.timedelta(days = 1) 
-
-#for testing
+#for testing purposes, comment out when testing complete
 today_date = datetime.datetime.strptime('13012021', "%d%m%Y").date()
 tomorrow_date = today_date + datetime.timedelta(days = 1) 
 
