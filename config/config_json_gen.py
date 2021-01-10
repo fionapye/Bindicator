@@ -29,7 +29,11 @@ led_colours = {
 bins = {
     "general" : ['brown'],
     "recycling" : ['pink','pink','grey','grey','black','black','blue','blue'],
-    "green" : ["green"]
+    "green" : ["green"],
+    "recycling_general" : ['pink','grey','grey','black','black','blue','brown','brown'],
+    "recycling_green" : ['pink','grey','grey','black','black','blue','green','green'],
+    "green_general" : ['brown','brown','brown','brown','green','green','green','green'],
+    "recyc_green_gen" : ['pink','grey','black','blue','brown','brown','green','green']
     }
 
 days = {
