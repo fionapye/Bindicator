@@ -148,15 +148,15 @@ def bindicate(binsout):
     elif len(binsout) == 2:
         # recycling and general
         if (binsout[0][0] == 'recycling' or binsout[1][0] == 'recycling') and (binsout[0][0] == 'general' or binsout[1][0] == 'general'):
-            pass
+            one_led(bins.get('recycling_general'))
         # recycling and green
         elif (binsout[0][0] == 'recycling' or binsout[1][0] == 'recycling') and (binsout[0][0] == 'green' or binsout[1][0] == 'green'):
-            pass
+            one_led(bins.get('recycling_green'))
         # general and green
-        elif (binsout[0][0] == 'general' or binsout[1][0] == 'general') and (binsout[0][0] == 'green' or binsout[1][0] == 'green'):
-            pass
+        elif (binsout[0][0] == 'green' or binsout[1][0] == 'green') and (binsout[0][0] == 'general' or binsout[1][0] == 'general'):
+            one_led(bins.get('green_general'))
     elif len(binsout) == 3:
-        pass
+        one_led(bins.get('recyc_green_gen'))
     else:
         print('no lights')
         leds_off()
@@ -187,6 +187,17 @@ tomorrow_date = today_date + datetime.timedelta(days = 1)
 
 # work out if any bins go out today
 binsout = bins_out(bindays)
+
+#for testing purposes, comment out when testing complete
+binsout_two_a = [['recycling', datetime.date(2021, 1, 14)], ['green', datetime.date(2021, 1, 14)]]
+binsout_two_b = [['recycling', datetime.date(2021, 1, 14)], ['general', datetime.date(2021, 1, 14)]]
+binsout_two_c = [['green', datetime.date(2021, 1, 14)], ['general', datetime.date(2021, 1, 14)]]
+binsout_three = [['recycling', datetime.date(2021, 1, 14)], ['green', datetime.date(2021, 1, 14)], ['general', datetime.date(2021, 1, 14)] ]
+
+bindicate(binsout_two_a)
+bindicate(binsout_two_b)
+bindicate(binsout_two_c)
+bindicate(binsout_three)
 
 # light up to show if any bins need to go out
 bindicate(binsout)
