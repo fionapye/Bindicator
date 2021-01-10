@@ -22,6 +22,34 @@ def read_json (path):
         data = json.load(json_file)
     return data
 
+ # function to test the vaildity of scraped day
+def day_validity_test(scr_day):
+    for day in days:
+        if days.get(day) == scr_day:  # if the scraped day is in the days data
+            test = True
+            break
+        else:
+            test = False
+    return test
+
+
+# function to parse date data from xpath
+def info_extract(xpath_value):
+    date = doc.xpath(xpath_value + '/text()') # get the text from the xpath location
+    date_str = date[0].split(' ') # split  the text on spaces
+    valid_date = day_validity_test(date_str[0])
+    if valid_date:
+        print(date_str)
+        mon = str(strptime(date_str[2],'%b').tm_mon) # turn month into numeric form
+        datenum = str(date_str[1]+mon+date_str[3]) # generate numeric date string for conversion
+        print(datenum)  
+        binday_date = datetime.datetime.strptime(datenum, "%d%m%Y").date() # convert to datetime format
+        info = [date_str[0],binday_date, binday_date.weekday()] # list for ouput
+        return info
+    else:
+        info = [None, None, None]
+        return info
+
 # function to light up leds individually 
 def one_led (led,col):
     colr = led_colours.get(col)  # get the colour settings from dictionary
@@ -54,9 +82,6 @@ urlpage = read_json(os.path.join(wdir,'urlpath','path.json'))  # load url for bi
 # webscraping
 html = requests.get(urlpage.get('urlpath'))
 doc = lxml.html.fromstring(html.content)
-recycling_date = doc.xpath('/html/body/div[2]/div/div/form/table/tbody/tr[1]/td[1]/div/text()')
-green_date = doc.xpath('/html/body/div[2]/div/div/form/table/tbody/tr[2]/td[1]/div/text()')
-general_date = doc.xpath('/html/body/div[2]/div/div/form/table/tbody/tr[3]/td[1]/div/text()')
 
 xpaths ={
     'recycling' : '/html/body/div[2]/div/div/form/table/tbody/tr[1]/td[1]/div',
@@ -64,36 +89,14 @@ xpaths ={
     'general' : '/html/body/div[2]/div/div/form/table/tbody/tr[3]/td[1]/div'
 }
 
-def info_extract(xpath_value):
-    date = doc.xpath(xpath_value + '/text()')
-    date_str = date[0].split(' ')
-    print(date_str)
-    mon = str(strptime(date_str[2],'%b').tm_mon)
-    if len(month) == 1:
-        mon = mon.zfill(2)
-    if len(date_str[1]) == 1:
-        day = day.zfill(2)
-    else:
-        day = date_str[1]
-    datenum = str(day+mon+date_str[3])
-    print(datenum)
-    binday_date = datetime.datetime.strptime(datenum, "%d%m%Y").date()
-    bin_weekday = binday.weekday()
-    print(binday)
-    print(f'{binday.weekday()}')
+for type in xpaths:
+    print(type)
+    dayabr, date, weekday = info_extract(xpaths.get(type))
 
-info_extract(xpaths.get('recycling'))
+dayabr, date, weekday = info_extract(xpaths.get('green'))
 
-
-#for day in days:
- #   print(days.get(day))
-#    if days.get(day) == recycling_day_abr:
-#        recycling_day = day
-#        print(day)
-#    else:
-#        print('no')
-
-    
+if x == True:
+    print('yes')
 # weekdays as a tuple
 weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
 
