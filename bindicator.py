@@ -130,7 +130,7 @@ def leds_off():
 
 # need to test for multiple types on one day, later upgrade make process work first
 
-def bincicate(binsout):
+def bindicate(binsout):
     if len(binsout) >= 1:  # if binsout has value 
         print('lights')
         blinkt.clear()
@@ -176,44 +176,10 @@ tomorrow_date = today_date + datetime.timedelta(days = 1)
 # work out if any bins go out today
 binsout = bins_out(bindays)
 
-#get_dayname(tomorrow_date)
-
+# light up to show if any bins need to go out
 bindicate(binsout)
 
 # cleanup
 time.sleep(5)
 leds_off()
-    #turn on lights
-
-#if today_num == 6:
-#    tomorrow_num = 0
-#else:
-#    tomorrow_num = today_num + 1
-
-#today_day = weekDays[today_num]
-#tomorrow_day = weekDays[tomorrow_num]
-
-#remove, for real version
-#today_day = 'Wednesday'
-#tomorrow_day = 'Thursday'
-#bintype = 2
-
-    
-#if tomorrow_day == binday:
-#    print (f'Yes, today is {today_day} and {tomorrow_day} is binday')
-#    blinkt.clear()
- #   if bintype == 0:  # recycling
- #       for i in range(len(bins.get('recycling'))):
-  #          one_led(i,bins.get('recycling')[i])  # light up colours for recycling
-   #     #blinkt.show()
-    #elif bintype == 1:  # general
-     #   all_led(bins.get('general')[0])  # light up brown for gener
-   # elif bintype == 2:
-    #    all_led(bins.get('green')[0])
-#else:
-#    print (f'No tomorrow, {tomorrow_day}, is not binday')
-#    leds_off()
-
-#time.sleep(5)
-#leds_off()
 
