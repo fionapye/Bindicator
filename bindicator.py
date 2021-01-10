@@ -130,7 +130,7 @@ def leds_off():
 
 # lights for one bin to go out
 def one_bindicate(binsout):
-    if len(bindicate) != 1 : return  # if the len condition not met leave function
+    if len(binsout) != 1 : return  # if the len condition not met leave function
     print('lights')
     blinkt.clear()
     if binsout[0][0] == 'recycling':  # recycling
@@ -146,7 +146,7 @@ def one_bindicate(binsout):
 
 # lights if two bins to go out
 def two_bindicate(binsout):
-    if len(bindicate) != 2 : return  # if the len condition not met leave function
+    if len(binsout) != 2 : return  # if the len condition not met leave function
     print('lights')
     # recycling and general
     if (binsout[0][0] == 'recycling' or binsout[1][0] == 'recycling') and (binsout[0][0] == 'general' or binsout[1][0] == 'general'):
@@ -163,7 +163,7 @@ def two_bindicate(binsout):
 
 # lights for if three bins to go out
 def three_bindicate(binsout):
-    if len(bindicate) != 3 : return  # if the len condition not met leave function
+    if len(binsout) != 3 : return  # if the len condition not met leave function
     print('lights')
     for i in range(len(bins.get('recyc_green_gen'))):
         one_led(i,bins.get('recyc_green_gen')[i])
@@ -172,38 +172,11 @@ def three_bindicate(binsout):
 def bindicate(binsout):
     if len(binsout) == 1:  # if binsout has value 
         one_bindicate(binsout)
-#        print('lights')
-#        blinkt.clear()
-#        if binsout[0][0] == 'recycling':  # recycling
-#            for i in range(len(bins.get('recycling'))):
-#                one_led(i,bins.get('recycling')[i])  # light up colours for recycling
-            #blinkt.show()
-#        elif binsout[0][0] == 'general':  # general
-#            all_led(bins.get('general')[0])  # light up brown for gener
-#        elif binsout[0][0] == 'green':
-#            all_led(bins.get('green')[0])
-#        else:
-#            print (f'Bin(s) don\'t need to go out today as it is {get_dayname(today_date)}')
-#            leds_off()
     elif len(binsout) == 2:
         two_bindicate(binsout)
-        # recycling and general
-#        if (binsout[0][0] == 'recycling' or binsout[1][0] == 'recycling') and (binsout[0][0] == 'general' or binsout[1][0] == 'general'):
-#            for i in range(len(bins.get('recycling_general'))):
-#                one_led(i,bins.get('recycling_general')[i])
-        # recycling and green
-#        elif (binsout[0][0] == 'recycling' or binsout[1][0] == 'recycling') and (binsout[0][0] == 'green' or binsout[1][0] == 'green'):
-#            for i in range(len(bins.get('recycling_green'))):
-#                one_led(i,bins.get('recycling_green')[i])
-        # general and green
-#        elif (binsout[0][0] == 'green' or binsout[1][0] == 'green') and (binsout[0][0] == 'general' or binsout[1][0] == 'general'):
-#            for i in range(len(bins.get('green_general'))):
-#                one_led(i,bins.get('green_general')[i])
     elif len(binsout) == 3:
         three_bindicate(binsout)
- #       for i in range(len(bins.get('recyc_green_gen'))):
- #           one_led(i,bins.get('recyc_green_gen')[i])
-    else:
+    elif len(binsout) == 0:
         print('no lights')
         leds_off()
 
