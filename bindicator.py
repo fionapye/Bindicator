@@ -188,6 +188,20 @@ def bindicate(binsout):
 
 #### DEMO
 def demo ():
+    
+    # generate working directory
+    wdir = gen_wdir() 
+
+    # load all the data stored in json
+    led_colours = read_json(os.path.join(wdir,'config','led_colours.json'))  # load colour data (rgb)
+    days = read_json(os.path.join(wdir,'config','days.json')) #load days data
+    bins = read_json(os.path.join(wdir,'config','bins.json')) #load bins colour data
+    urlpage = read_json(os.path.join(wdir,'urlpath','path.json'))  # load url for bin collection
+    xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))  # load xpaths for webscrape (maybe merge with urlpage?)
+
+    # get the bindays from the website
+    bindays = get_bindays(xpaths) 
+    
     today_date, tomorrow_date = gen_today_tomorrow()
 
     binsout_recy = [['recycling', tomorrow_date]]
