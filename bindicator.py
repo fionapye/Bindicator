@@ -1,7 +1,7 @@
 # Bindicator script
 
 #shebang line - tells the system where the interpreter is
-! /usr/bin/python3
+#! /usr/bin/python3
 
 import blinkt
 import numpy as np
@@ -186,7 +186,40 @@ def bindicate(binsout):
         leds_off()
 
 
+#### DEMO
+def demo ():
+    today_date, tomorrow_date = gen_today_tomorrow()
+
+    binsout_recy = [['recycling', tomorrow_date]]
+    binsout_gen = [['general', tomorrow_date]]
+    binsout_green = [['green', tomorrow_date]]
+    binsout_two_a = [['recycling', tomorrow_date], ['green', tomorrow_date]]
+    binsout_two_b = [['recycling', tomorrow_date], ['general', tomorrow_date]]
+    binsout_two_c = [['green', tomorrow_date], ['general', tomorrow_date]]
+    binsout_three = [['recycling', tomorrow_date], ['green', tomorrow_date], ['general', tomorrow_date] ]
+
+    bindicate(binsout_recy)
+    time.sleep(5)
+    bindicate(binsout_gen)
+    time.sleep(5)
+    bindicate(binsout_green)
+    time.sleep(5)
+    bindicate(binsout_two_a)
+    time.sleep(5)
+    bindicate(binsout_two_b)
+    time.sleep(5)
+    bindicate(binsout_two_c)
+    time.sleep(5)
+    bindicate(binsout_three)
+    time.sleep(5)
+
+    leds_off()
+
+
 ###########################
+# run demo of lights
+demo()
+    
 # run process
 
 # generate working directory
@@ -215,36 +248,7 @@ bindicate(binsout)
 time.sleep(5)
 leds_off()
 
-#### DEMO
 
-def demo ():
-    today_date, tomorrow_date = gen_today_tomorrow()
 
-    binsout_recy = [['recycling', datetime.date(tomorrow_date)]]
-    binsout_gen = [['general', datetime.date(tomorrow_date)]]
-    binsout_green = [['green', datetime.date(tomorrow_date)]]
-    binsout_two_a = [['recycling', datetime.date(tomorrow_date)], ['green', datetime.date(tomorrow_date)]]
-    binsout_two_b = [['recycling', datetime.date(tomorrow_date], ['general', datetime.date(tomorrow_date)]]
-    binsout_two_c = [['green', datetime.date(tomorrow_date)], ['general', datetime.date(tomorrow_date]]
-    binsout_three = [['recycling', datetime.date(tomorrow_date)], ['green', datetime.date(tomorrow_date)], ['general', datetime.date(tomorrow_date)] ]
-
-    bindicate(binsout_recy)
-    time.sleep(5)
-    bindicate(binsout_gen)
-    time.sleep(5)
-    bindicate(binsout_green)
-    time.sleep(5)
-    bindicate(binsout_two_a)
-    time.sleep(5)
-    bindicate(binsout_two_b)
-    time.sleep(5)
-    bindicate(binsout_two_c)
-    time.sleep(5)
-    bindicate(binsout_three)
-    time.sleep(5)
-
-    leds_off()
-
-demo()
 
 
