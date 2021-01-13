@@ -203,43 +203,43 @@ today_date, tomorrow_date = gen_today_tomorrow()
 # work out if any bins go out today
 binsout = bins_out(bindays)
 
-
-#### DEMO
-
-#for testing purposes, comment out when testing complete
-today_date = datetime.datetime.strptime('13012021', "%d%m%Y").date()
-tomorrow_date = today_date + datetime.timedelta(days = 1) 
-
-#for testing purposes, comment out when testing complete. maybe add demo function?
-binsout_recy = [['recycling', datetime.date(2021, 1, 14)]]
-binsout_gen = [['general', datetime.date(2021, 1, 14)]]
-binsout_green = [['green', datetime.date(2021, 1, 14)]]
-binsout_two_a = [['recycling', datetime.date(2021, 1, 14)], ['green', datetime.date(2021, 1, 14)]]
-binsout_two_b = [['recycling', datetime.date(2021, 1, 14)], ['general', datetime.date(2021, 1, 14)]]
-binsout_two_c = [['green', datetime.date(2021, 1, 14)], ['general', datetime.date(2021, 1, 14)]]
-binsout_three = [['recycling', datetime.date(2021, 1, 14)], ['green', datetime.date(2021, 1, 14)], ['general', datetime.date(2021, 1, 14)] ]
-
-
-bindicate(binsout_recy)
-time.sleep(5)
-bindicate(binsout_gen)
-time.sleep(5)
-bindicate(binsout_green)
-time.sleep(5)
-bindicate(binsout_two_a)
-time.sleep(5)
-bindicate(binsout_two_b)
-time.sleep(5)
-bindicate(binsout_two_c)
-time.sleep(5)
-bindicate(binsout_three)
-time.sleep(5)
-
-#### END DEMO
-
 # light up to show if any bins need to go out
 bindicate(binsout)
 
 # cleanup
 time.sleep(5)
 leds_off()
+
+#### DEMO
+
+def demo ():
+    today_date, tomorrow_date = gen_today_tomorrow()
+
+    binsout_recy = [['recycling', datetime.date(tomorrow_date)]]
+    binsout_gen = [['general', datetime.date(tomorrow_date)]]
+    binsout_green = [['green', datetime.date(tomorrow_date)]]
+    binsout_two_a = [['recycling', datetime.date(tomorrow_date)], ['green', datetime.date(tomorrow_date)]]
+    binsout_two_b = [['recycling', datetime.date(tomorrow_date], ['general', datetime.date(tomorrow_date)]]
+    binsout_two_c = [['green', datetime.date(tomorrow_date)], ['general', datetime.date(tomorrow_date]]
+    binsout_three = [['recycling', datetime.date(tomorrow_date)], ['green', datetime.date(tomorrow_date)], ['general', datetime.date(tomorrow_date)] ]
+
+    bindicate(binsout_recy)
+    time.sleep(5)
+    bindicate(binsout_gen)
+    time.sleep(5)
+    bindicate(binsout_green)
+    time.sleep(5)
+    bindicate(binsout_two_a)
+    time.sleep(5)
+    bindicate(binsout_two_b)
+    time.sleep(5)
+    bindicate(binsout_two_c)
+    time.sleep(5)
+    bindicate(binsout_three)
+    time.sleep(5)
+
+    leds_off()
+
+demo()
+
+
