@@ -1,7 +1,4 @@
-# Bindicator script
-
-#shebang line - tells the system where the interpreter is
-#! /usr/bin/python3
+#!/usr/bin/python3
 
 import blinkt
 import numpy as np
@@ -258,7 +255,7 @@ binsout = bins_out(bindays)
 bindicate(binsout)
 
 # cleanup
-time.sleep(5)
+time.sleep(900)
 leds_off()
 
 
