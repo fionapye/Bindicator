@@ -186,11 +186,11 @@ def bindicate(binsout):
         leds_off()
 
 
-#### DEMO
+#### DEMO - gets stuck, there will be the same issue for a run_bindicator function
 def demo ():
     
     # generate working directory
-    wdir = gen_wdir() 
+    wdir = gen_wdir()
 
     # load all the data stored in json
     led_colours = read_json(os.path.join(wdir,'config','led_colours.json'))  # load colour data (rgb)
@@ -199,9 +199,8 @@ def demo ():
     urlpage = read_json(os.path.join(wdir,'urlpath','path.json'))  # load url for bin collection
     xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))  # load xpaths for webscrape (maybe merge with urlpage?)
 
-    # get the bindays from the website
-    bindays = get_bindays(xpaths) 
-    
+    #bindays = get_bindays(xpaths) # get the bindays from the website
+
     today_date, tomorrow_date = gen_today_tomorrow()
 
     binsout_recy = [['recycling', tomorrow_date]]
@@ -229,10 +228,10 @@ def demo ():
 
     leds_off()
 
-
+    
 ###########################
 # run demo of lights
-demo()
+#demo()
     
 # run process
 
