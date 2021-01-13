@@ -1,3 +1,8 @@
+# Bindicator script
+
+#shebang line - tells the system where the interpreter is
+! /usr/bin/python3
+
 import blinkt
 import numpy as np
 import datetime
