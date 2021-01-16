@@ -8,9 +8,11 @@ import datetime
 from time import strptime
 import json
 import os
+import sys
 import platform
 import requests
 import lxml.html
+
 
 
 # paths between platforms (webscrape and parsing developed in windows)
@@ -39,6 +41,7 @@ def webscrape(url):
 
  # function to test the vaildity of scraped day
 def day_validity_test(scr_day):
+    days = read_json(os.path.join(gen_wdir(),'config','days.json')) ## added here as test
     for day in days:
         if days.get(day) == scr_day:  # if the scraped day is in the days data
             test = True
@@ -50,6 +53,7 @@ def day_validity_test(scr_day):
 
 # function to parse date data from website
 def info_extract(xpath_value):
+    urlpage = read_json(os.path.join(gen_wdir(),'urlpath','path.json'))  # load url for bin collection
     doc = webscrape(urlpage.get('urlpath'))
     date = doc.xpath(xpath_value + '/text()') # get the text from the xpath location
     date_str = date[0].split(' ') # split  the text on spaces
@@ -68,7 +72,8 @@ def info_extract(xpath_value):
 
 
 # function to get the bindays into a list 
-def get_bindays(xpaths):
+def get_bindays():
+    xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))  # load xpaths for webscrape (maybe merge with urlpage?)
     bindays = []
     for type in xpaths:
         data = [type] # get the name into a list
@@ -98,6 +103,7 @@ def bins_out (bindays):
         #print(type[1][1])
         bintype = type[0]
         binday = type[1][1]
+        today_date, tomorrow_date = gen_today_tomorrow()
         if binday: 
             if tomorrow_date == binday:
                 data = [bintype,binday]
@@ -112,6 +118,7 @@ def bins_out (bindays):
 
 # function to light up leds individually 
 def one_led (led,col):
+    led_colours = read_json(os.path.join(gen_wdir(),'config','led_colours.json'))  # load colour data (rgb)
     colr = led_colours.get(col)  # get the colour settings from dictionary
     blinkt.set_pixel(led,colr.get('r'), colr.get('g'), colr.get('b'), colr.get('br') )  # insert rgb values and brightness
     blinkt.show()
@@ -119,6 +126,7 @@ def one_led (led,col):
 
 # function to light up all leds in one colour
 def all_led (col):
+    led_colours = read_json(os.path.join(gen_wdir(),'config','led_colours.json'))  # load colour data (rgb)
     colr = led_colours.get(col)  # get pixel colour settings from dictionary
     blinkt.set_all(colr.get('r'), colr.get('g'), colr.get('b'), colr.get('br'))  # insert rgb values and brightness
     blinkt.show()  # display leds
@@ -132,6 +140,7 @@ def leds_off():
 
 # lights for one bin to go out
 def one_bindicate(binsout):
+    bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
     if len(binsout) != 1 : return  # if the len condition not met leave function
     print('lights')
     blinkt.clear()
@@ -148,6 +157,7 @@ def one_bindicate(binsout):
 
 # lights if two bins to go out
 def two_bindicate(binsout):
+    bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
     if len(binsout) != 2 : return  # if the len condition not met leave function
     print('lights')
     # recycling and general
@@ -165,6 +175,7 @@ def two_bindicate(binsout):
 
 # lights for if three bins to go out
 def three_bindicate(binsout):
+    bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
     if len(binsout) != 3 : return  # if the len condition not met leave function
     print('lights')
     for i in range(len(bins.get('recyc_green_gen'))):
@@ -184,79 +195,91 @@ def bindicate(binsout):
 
 
 #### DEMO - gets stuck, there will be the same issue for a run_bindicator function
-def demo ():
+def main(run):
     
-    # generate working directory
-    wdir = gen_wdir()
+    #arguments to indicate if demo
+    #if len(sys.argv[1]) > 0:
+    if run == 'demo':
+        #demo stuff that overlaps with run
+        print('demo')
+        # generate working directory
+        #wdir = gen_wdir()
+        # load all the data stored in json
+        #led_colours = read_json(os.path.join(gen_wdir(),'config','led_colours.json'))  # load colour data (rgb)
+        #days = read_json(os.path.join(wdir,'config','days.json')) #load days data
+        #bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
+        #urlpage = read_json(os.path.join(wdir,'urlpath','path.json'))  # load url for bin collection
+        #xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))  # load xpaths for webscrape (maybe merge with urlpage?)
+        #bindays = get_bindays(xpaths) # get the bindays from the website
+        today_date, tomorrow_date = gen_today_tomorrow()
 
-    # load all the data stored in json
-    led_colours = read_json(os.path.join(wdir,'config','led_colours.json'))  # load colour data (rgb)
-    days = read_json(os.path.join(wdir,'config','days.json')) #load days data
-    bins = read_json(os.path.join(wdir,'config','bins.json')) #load bins colour data
-    urlpage = read_json(os.path.join(wdir,'urlpath','path.json'))  # load url for bin collection
-    xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))  # load xpaths for webscrape (maybe merge with urlpage?)
+        binsout_recy = [['recycling', tomorrow_date]]
+        binsout_gen = [['general', tomorrow_date]]
+        binsout_green = [['green', tomorrow_date]]
+        binsout_two_a = [['recycling', tomorrow_date], ['green', tomorrow_date]]
+        binsout_two_b = [['recycling', tomorrow_date], ['general', tomorrow_date]]
+        binsout_two_c = [['green', tomorrow_date], ['general', tomorrow_date]]
+        binsout_three = [['recycling', tomorrow_date], ['green', tomorrow_date], ['general', tomorrow_date] ]
 
-    #bindays = get_bindays(xpaths) # get the bindays from the website
+        bindicate(binsout_recy)
+        time.sleep(5)
+        bindicate(binsout_gen)
+        time.sleep(5)
+        bindicate(binsout_green)
+        time.sleep(5)
+        bindicate(binsout_two_a)
+        time.sleep(5)
+        bindicate(binsout_two_b)
+        time.sleep(5)
+        bindicate(binsout_two_c)
+        time.sleep(5)
+        bindicate(binsout_three)
+        time.sleep(5)
+        leds_off()
+    else:
+        #do run stuff that isnt in demo
+        print('real')
 
-    today_date, tomorrow_date = gen_today_tomorrow()
 
-    binsout_recy = [['recycling', tomorrow_date]]
-    binsout_gen = [['general', tomorrow_date]]
-    binsout_green = [['green', tomorrow_date]]
-    binsout_two_a = [['recycling', tomorrow_date], ['green', tomorrow_date]]
-    binsout_two_b = [['recycling', tomorrow_date], ['general', tomorrow_date]]
-    binsout_two_c = [['green', tomorrow_date], ['general', tomorrow_date]]
-    binsout_three = [['recycling', tomorrow_date], ['green', tomorrow_date], ['general', tomorrow_date] ]
+#if __name__ == "__main__":
+#    main()
 
-    bindicate(binsout_recy)
-    time.sleep(5)
-    bindicate(binsout_gen)
-    time.sleep(5)
-    bindicate(binsout_green)
-    time.sleep(5)
-    bindicate(binsout_two_a)
-    time.sleep(5)
-    bindicate(binsout_two_b)
-    time.sleep(5)
-    bindicate(binsout_two_c)
-    time.sleep(5)
-    bindicate(binsout_three)
-    time.sleep(5)
 
-    leds_off()
+    
 
     
 ###########################
 # run demo of lights
-#demo()
+main("demo")
+main("real")
     
 # run process
 
 # generate working directory
-wdir = gen_wdir() 
+#wdir = gen_wdir() 
 
 # load all the data stored in json
-led_colours = read_json(os.path.join(wdir,'config','led_colours.json'))  # load colour data (rgb)
-days = read_json(os.path.join(wdir,'config','days.json')) #load days data
-bins = read_json(os.path.join(wdir,'config','bins.json')) #load bins colour data
-urlpage = read_json(os.path.join(wdir,'urlpath','path.json'))  # load url for bin collection
-xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))  # load xpaths for webscrape (maybe merge with urlpage?)
+#led_colours = read_json(os.path.join(wdir,'config','led_colours.json'))  # load colour data (rgb)
+#days = read_json(os.path.join(wdir,'config','days.json')) #load days data
+#bins = read_json(os.path.join(wdir,'config','bins.json')) #load bins colour data
+#urlpage = read_json(os.path.join(wdir,'urlpath','path.json'))  # load url for bin collection
+#xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))  # load xpaths for webscrape (maybe merge with urlpage?)
 
 # get the bindays from the website
-bindays = get_bindays(xpaths) 
+#bindays = get_bindays(xpaths) 
 
 # get current date data for comparison with website
-today_date, tomorrow_date = gen_today_tomorrow()
+#today_date, tomorrow_date = gen_today_tomorrow()
 
 # work out if any bins go out today
-binsout = bins_out(bindays)
+#binsout = bins_out(bindays)
 
 # light up to show if any bins need to go out
-bindicate(binsout)
+#bindicate(binsout)
 
 # cleanup
-time.sleep(900)
-leds_off()
+#time.sleep(900)
+#leds_off()
 
 
 
