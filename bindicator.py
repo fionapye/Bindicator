@@ -1,10 +1,8 @@
 #!/usr/bin/python3
 
 import blinkt
-import numpy as np
 import datetime
 import time
-import datetime
 from time import strptime
 import json
 import os
@@ -193,15 +191,26 @@ def bindicate(binsout):
     elif len(binsout) == 3: # if binsout has three bin types
         three_bindicate(binsout)
     elif len(binsout) == 0:
-        print (f'Bin(s) don\'t need to go out today as it is {get_dayname(gen_today_tomorrow()[0])}')  # user notification
+        #print (f'Bin(s) don\'t need to go out today as it is {get_dayname(gen_today_tomorrow()[0])}')  # user notification
         leds_off()
 
 
 #### main function to run the process
 def main():
     
+    if len(sys.argv) == 1:
+        #do run stuff that isnt in demo
+        print("Live bindicate")  # user notification
+        bindays = get_bindays()  # get the bindays
+        binsout = bins_out(bindays)  # get the data for bins to go out
+        # light up to show if any bins need to go out
+        bindicate(binsout)  # light up for any bins to go out today
+        # cleanup
+        time.sleep(900)  # stay lit for 15 mins
+        leds_off()  # turn the leds off
+        
     #arguments to indicate if demo
-    if len(sys.argv[1]) == "demo": # if the terminal is given the demo instruction run this 
+    elif len(sys.argv) == 2 and sys.argv[1] == "demo": # if the terminal is given the demo instruction run this 
         #demo stuff that overlaps with run
         print("Bindicate demo")
 
@@ -216,31 +225,37 @@ def main():
         binsout_two_c = [['green', tomorrow_date], ['general', tomorrow_date]]
         binsout_three = [['recycling', tomorrow_date], ['green', tomorrow_date], ['general', tomorrow_date] ]
 
+        print("Colour code for recycling")
         bindicate(binsout_recy)
         time.sleep(5)
+        
+        print("Colour code for general")
         bindicate(binsout_gen)
         time.sleep(5)
+        
+        print("Colour code for recycling")
         bindicate(binsout_green)
         time.sleep(5)
+        
+        print("Colour code for recycling and green")
         bindicate(binsout_two_a)
         time.sleep(5)
+        
+        print("Colour code for recycling and general")
         bindicate(binsout_two_b)
         time.sleep(5)
+        
+        print("Colour code for green and general")
         bindicate(binsout_two_c)
         time.sleep(5)
+        
+        print("Colour code for recycling, green and general")
         bindicate(binsout_three)
         time.sleep(5)
         leds_off()
-    else: # other variable or no variable given runs the live bindicate
-        #do run stuff that isnt in demo
-        print("Live bindicate")  # user notification
-        bindays = get_bindays()  # get the bindays
-        binsout = bins_out(bindays)  # get the data for bins to go out
-        # light up to show if any bins need to go out
-        bindicate(binsout)  # light up for any bins to go out today
-        # cleanup
-        time.sleep(900)  # stay lit for 15 mins
-        leds_off()  # turn the leds off
+    else:
+        print("Unknown command for bindicator")
+        
 
 
 # run the bindicator
