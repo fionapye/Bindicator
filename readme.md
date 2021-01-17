@@ -15,5 +15,10 @@ Automate bindicator (run at certain times)
 * allow file to be executable from shell https://www.codementor.io/@gergelykovcs/how-to-run-and-schedule-python-scripts-on-raspberry-pi-n2clhe3kp
 * add file execution via cron https://garyhall.org.uk/troubleshooting-cron-raspberry-pi.html
 
-Written in python 3.7.3 and built using Rasperry Pi Zero W running on Raspbian GNU/Linux 10 (buster) </br>
-Lights used are https://shop.pimoroni.com/products/blinkt and operated using the python package blinkt
+Run demo
+* run the script from the terminal (list full filepath) with the variable "demo" as shown below </br>
+&nbsp;&nbsp;&nbsp;&nbsp; .../Bindicator/bindicator.py "demo" 
+* this will light up all the configured light codes and print the corresponding bin types to the terminal
+
+Written in Python 3.7.3 and built using Rasperry Pi Zero W running on Raspbian GNU/Linux 10 (buster) </br>
+Lights used are https://shop.pimoroni.com/products/blinkt and operated using the Python package blinkt
