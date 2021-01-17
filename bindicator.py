@@ -36,6 +36,7 @@ def webscrape(url):
     # webscraping
     html = requests.get(url)
     doc = lxml.html.fromstring(html.content)
+    #print("Bin collection data read from website")
     return doc
 
 
@@ -45,35 +46,40 @@ def day_validity_test(scr_day):
     for day in days:
         if days.get(day) == scr_day:  # if the scraped day is in the days data
             test = True
+            #print("Valid collection day identified")
             break
         else:
             test = False
+            #print("No collection day set or unconfigured day abbreviation")
     return test
 
 
 # function to parse date data from website
 def info_extract(xpath_value):
     urlpage = read_json(os.path.join(gen_wdir(),'urlpath','path.json'))  # load url for bin collection
-    doc = webscrape(urlpage.get('urlpath'))
+    doc = webscrape(urlpage.get('urlpath'))  # load url for council website
     date = doc.xpath(xpath_value + '/text()') # get the text from the xpath location
     date_str = date[0].split(' ') # split  the text on spaces
     valid_date = day_validity_test(date_str[0]) # test is an allowed value
     if valid_date:
+        #print("Valid collection day identified")
         #print(date_str)
         mon = str(strptime(date_str[2],'%b').tm_mon) # turn month into numeric form
         datenum = str(date_str[1]+mon+date_str[3]) # generate numeric date string for conversion
         #print(datenum)  
         binday_date = datetime.datetime.strptime(datenum, "%d%m%Y").date() # convert to datetime format
         info = [date_str[0],binday_date, binday_date.weekday()] # list for ouput
+        #print(f'Next {date_str[0]} bin collection date is {binday_date}')
         return info
     else:
         info = [None, None, None]
+        #print("No collection day set or unconfigured day abbreviation")
         return info
 
 
 # function to get the bindays into a list 
 def get_bindays():
-    xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))  # load xpaths for webscrape (maybe merge with urlpage?)
+    xpaths = read_json(os.path.join(gen_wdir(),'config','xpaths.json'))  # load xpaths for webscrape (maybe merge with urlpage?)
     bindays = []
     for type in xpaths:
         data = [type] # get the name into a list
@@ -142,7 +148,7 @@ def leds_off():
 def one_bindicate(binsout):
     bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
     if len(binsout) != 1 : return  # if the len condition not met leave function
-    print('lights')
+    #print('lights')
     blinkt.clear()
     if binsout[0][0] == 'recycling':  # recycling
         for i in range(len(bins.get('recycling'))):
@@ -159,7 +165,7 @@ def one_bindicate(binsout):
 def two_bindicate(binsout):
     bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
     if len(binsout) != 2 : return  # if the len condition not met leave function
-    print('lights')
+    #print('lights')
     # recycling and general
     if (binsout[0][0] == 'recycling' or binsout[1][0] == 'recycling') and (binsout[0][0] == 'general' or binsout[1][0] == 'general'):
         for i in range(len(bins.get('recycling_general'))):
@@ -177,7 +183,7 @@ def two_bindicate(binsout):
 def three_bindicate(binsout):
     bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
     if len(binsout) != 3 : return  # if the len condition not met leave function
-    print('lights')
+    #print('lights')
     for i in range(len(bins.get('recyc_green_gen'))):
         one_led(i,bins.get('recyc_green_gen')[i])
 
@@ -190,7 +196,7 @@ def bindicate(binsout):
     elif len(binsout) == 3:
         three_bindicate(binsout)
     elif len(binsout) == 0:
-        print('no lights')
+        #print('no lights')
         leds_off()
 
 
@@ -201,16 +207,8 @@ def main(run):
     #if len(sys.argv[1]) > 0:
     if run == 'demo':
         #demo stuff that overlaps with run
-        print('demo')
-        # generate working directory
-        #wdir = gen_wdir()
-        # load all the data stored in json
-        #led_colours = read_json(os.path.join(gen_wdir(),'config','led_colours.json'))  # load colour data (rgb)
-        #days = read_json(os.path.join(wdir,'config','days.json')) #load days data
-        #bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
-        #urlpage = read_json(os.path.join(wdir,'urlpath','path.json'))  # load url for bin collection
-        #xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))  # load xpaths for webscrape (maybe merge with urlpage?)
-        #bindays = get_bindays(xpaths) # get the bindays from the website
+        print("Bindicate demo")
+
         today_date, tomorrow_date = gen_today_tomorrow()
 
         binsout_recy = [['recycling', tomorrow_date]]
@@ -238,48 +236,24 @@ def main(run):
         leds_off()
     else:
         #do run stuff that isnt in demo
-        print('real')
+        print("Live bindicate")
+        bindays = get_bindays()
+        binsout = bins_out(bindays)
+        # light up to show if any bins need to go out
+        bindicate(binsout)
+        # cleanup
+        #time.sleep(900)
+        leds_off()
 
 
 #if __name__ == "__main__":
 #    main()
 
-
-    
-
     
 ###########################
 # run demo of lights
-main("demo")
+#main("demo")
 main("real")
-    
-# run process
-
-# generate working directory
-#wdir = gen_wdir() 
-
-# load all the data stored in json
-#led_colours = read_json(os.path.join(wdir,'config','led_colours.json'))  # load colour data (rgb)
-#days = read_json(os.path.join(wdir,'config','days.json')) #load days data
-#bins = read_json(os.path.join(wdir,'config','bins.json')) #load bins colour data
-#urlpage = read_json(os.path.join(wdir,'urlpath','path.json'))  # load url for bin collection
-#xpaths = read_json(os.path.join(wdir,'config','xpaths.json'))  # load xpaths for webscrape (maybe merge with urlpage?)
-
-# get the bindays from the website
-#bindays = get_bindays(xpaths) 
-
-# get current date data for comparison with website
-#today_date, tomorrow_date = gen_today_tomorrow()
-
-# work out if any bins go out today
-#binsout = bins_out(bindays)
-
-# light up to show if any bins need to go out
-#bindicate(binsout)
-
-# cleanup
-#time.sleep(900)
-#leds_off()
 
 
 
