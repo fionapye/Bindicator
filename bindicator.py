@@ -143,18 +143,29 @@ def leds_off():
 
 
 # lights for one bin to go out
+# def one_bindicate(binsout):
+#     bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
+#     if len(binsout) != 1 : return  # if the len condition not met leave function
+#     #print('lights')
+#     blinkt.clear()  # clear any settings for leds
+#     if binsout[0][0] == 'recycling':  # recycling
+#         for ind,col in enumerate(bins.get('recycling')):
+#             one_led(ind,bins.get('recycling')[ind])  # light up colours for recycling
+#     elif binsout[0][0] == 'general':  # general bin
+#         all_led(bins.get('general')[0])   # light up colours for general
+#     elif binsout[0][0] == 'green':  # green bin
+#         all_led(bins.get('green')[0])   # light up colours for green
+
 def one_bindicate(binsout):
     bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
     if len(binsout) != 1 : return  # if the len condition not met leave function
     #print('lights')
     blinkt.clear()  # clear any settings for leds
-    if binsout[0][0] == 'recycling':  # recycling
-        for ind,col in enumerate(bins.get('recycling')):
-            one_led(ind,bins.get('recycling')[ind])  # light up colours for recycling
-    elif binsout[0][0] == 'general':  # general bin
-        all_led(bins.get('general')[0])   # light up colours for general
-    elif binsout[0][0] == 'green':  # green bin
-        all_led(bins.get('green')[0])   # light up colours for green
+    if binsout[0][0] in bins.keys():
+        for ind,col in enumerate(bins.get(binsout[0][0])):
+            one_led(ind,bins.get(binsout[0][0])[ind])  # light up colours for recycling
+    else:
+        print(f'{binsout[0][0]} is an unconfigured type')
 
 
 # lights if two bins to go out
@@ -169,7 +180,7 @@ def two_bindicate(binsout):
     # recycling and green
     elif (binsout[0][0] == 'recycling' or binsout[1][0] == 'recycling') and (binsout[0][0] == 'green' or binsout[1][0] == 'green'):
         for ind,col in enumerate(bins.get('recycling_green')):
-            one_led(ind,bins.get('recycling_green')[ndi])   #light up colours for recycling and green
+            one_led(ind,bins.get('recycling_green')[ind])   #light up colours for recycling and green
     # general and green
     elif (binsout[0][0] == 'green' or binsout[1][0] == 'green') and (binsout[0][0] == 'general' or binsout[1][0] == 'general'):
         for ind,col in enumerate(bins.get('green_general')):
