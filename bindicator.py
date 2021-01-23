@@ -92,6 +92,7 @@ def gen_today_tomorrow():
     tomorrow_date = today_date + datetime.timedelta(days = 1)  # get the date for tomorrow by adding a day
     return [today_date, tomorrow_date]
 
+
 #function to get dayname from input date
 def get_dayname(date):
     weekdays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")  # weekdays as a tuple to get day name from day number
@@ -148,8 +149,8 @@ def one_bindicate(binsout):
     #print('lights')
     blinkt.clear()  # clear any settings for leds
     if binsout[0][0] == 'recycling':  # recycling
-        for i in range(len(bins.get('recycling'))):
-            one_led(i,bins.get('recycling')[i])  # light up colours for recycling
+        for ind,col in enumerate(bins.get('recycling')):
+            one_led(ind,bins.get('recycling')[ind])  # light up colours for recycling
     elif binsout[0][0] == 'general':  # general bin
         all_led(bins.get('general')[0])   # light up colours for general
     elif binsout[0][0] == 'green':  # green bin
@@ -163,24 +164,24 @@ def two_bindicate(binsout):
     #print('lights')
     # recycling and general
     if (binsout[0][0] == 'recycling' or binsout[1][0] == 'recycling') and (binsout[0][0] == 'general' or binsout[1][0] == 'general'):
-        for i in range(len(bins.get('recycling_general'))):
-            one_led(i,bins.get('recycling_general')[i])  #light up colours for recycling and general
+        for ind,col in enumerate(bins.get('recycling_general')):
+            one_led(ind,bins.get('recycling_general')[ind])  #light up colours for recycling and general
     # recycling and green
     elif (binsout[0][0] == 'recycling' or binsout[1][0] == 'recycling') and (binsout[0][0] == 'green' or binsout[1][0] == 'green'):
-        for i in range(len(bins.get('recycling_green'))):
-            one_led(i,bins.get('recycling_green')[i])   #light up colours for recycling and green
+        for ind,col in enumerate(bins.get('recycling_green')):
+            one_led(ind,bins.get('recycling_green')[ndi])   #light up colours for recycling and green
     # general and green
     elif (binsout[0][0] == 'green' or binsout[1][0] == 'green') and (binsout[0][0] == 'general' or binsout[1][0] == 'general'):
-        for i in range(len(bins.get('green_general'))):
-            one_led(i,bins.get('green_general')[i])    #light up colours for green and general
+        for ind,col in enumerate(bins.get('green_general')):
+            one_led(ind,bins.get('green_general')[ind])    #light up colours for green and general
 
 # lights for if three bins to go out
 def three_bindicate(binsout):
     bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
     if len(binsout) != 3 : return  # if the len condition not met leave function
     #print('lights')
-    for i in range(len(bins.get('recyc_green_gen'))):
-        one_led(i,bins.get('recyc_green_gen')[i])  #   #light up colours for recycling, green and general
+    for ind,col in enumerate(bins.get('recyc_green_gen')):
+        one_led(ind,bins.get('recyc_green_gen')[ind])  #   #light up colours for recycling, green and general
 
 # run lights, route based on number required
 def bindicate(binsout):
@@ -259,7 +260,7 @@ def main():
 
 
 # run the bindicator
-main()
-
+if __name__ == '__main__':
+    main()
 
 
