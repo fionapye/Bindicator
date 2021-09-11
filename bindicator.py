@@ -28,6 +28,18 @@ def read_json (path):
         data = json.load(json_file)  # given a path to a json file, load into dictionary
     return data
 
+# push notifications
+def pushover(message):
+    notifications = read_json(os.path.join(gen_wdir(),'notifications','tokens.json'))
+    conn = http.client.HTTPSConnection("api.pushover.net:443")
+    conn.request("POST", "/1/messages.json",
+    urllib.parse.urlencode({
+    "token": notifications.get('app'),
+    "user": notifications.get('user'),
+    "message": message,
+    }), { "Content-type": "application/x-www-form-urlencoded" })
+    conn.getresponse()
+
 
 # webscraping
 def webscrape(url):
@@ -62,7 +74,7 @@ def info_extract(xpath_value):
     if valid_date:
         #print("Valid collection day identified")
         #print(date_str)
-        mon = str(strptime(date_str[2],'%b').tm_mon) # turn month into numeric form
+        mon = str(strptime(date_str[2][:3],"%b").tm_mon) # turn month into numeric form, trim to three digits
         datenum = str(date_str[1]+mon+date_str[3]) # generate numeric date string for conversion
         #print(datenum)  
         binday_date = datetime.datetime.strptime(datenum, "%d%m%Y").date() # convert to datetime format
@@ -80,6 +92,7 @@ def get_bindays():
     xpaths = read_json(os.path.join(gen_wdir(),'config','xpaths.json'))  # load xpaths for webscrape (maybe merge with urlpage?)
     bindays = []  # empty list to compile data into
     for type in xpaths:
+        print(type)
         data = [type] # get the name into a list
         data.append(info_extract(xpaths.get(type))) # attach data to names
         bindays.append(data) #put all the data together into list
@@ -107,18 +120,27 @@ def bins_out (bindays):
         #print(type[1][1])
         bintype = type[0]  # from the scraped data, get the bin type
         binday = type[1][1]  # associated bin days
+#temp for testing        today_date, tomorrow_date = gen_today_tomorrow()
         today_date, tomorrow_date = gen_today_tomorrow()
         if binday: 
             if tomorrow_date == binday:  # if a bin type will be collected tomorrow
                 data = [bintype,binday]
                 typeout.append(data)  # append the bin data
                 print(f'{bintype.title()} bin(s) to go out today as tomorrow is {get_dayname(tomorrow_date)}')  # user notification
+                # send push message
+                push_message = f'{bintype.title()} bin(s) to go out today as tomorrow is {get_dayname(tomorrow_date)}'
+                pushover(push_message)
             else:
                 print(f'{bintype.title()} bin(s) don\'t need to go out today as it is {get_dayname(today_date)}')  # user notification
         else:
             print(f'No data available for the collection of {bintype.title()} bin(s)')  # user notification
     return typeout
 
+
+# dates for testing 
+#today_date = datetime.date(2021,9,15)
+#tomorrow_date = datetime.date(2021,9,16)
+#bins_out(get_bindays())
 
 # function to light up leds individually 
 def one_led (led,col):
@@ -206,16 +228,7 @@ def bindicate(binsout):
         #print (f'Bin(s) don\'t need to go out today as it is {get_dayname(gen_today_tomorrow()[0])}')  # user notification
         leds_off()
 
-def pushover():
-    notifications = read_json(os.path.join(gen_wdir(),'notifications','tokens.json'))
-    conn = http.client.HTTPSConnection("api.pushover.net:443")
-    conn.request("POST", "/1/messages.json",
-    urllib.parse.urlencode({
-    "token": notifications.get('app'),
-    "user": notifications.get('user'),
-    "message": "hello world",
-    }), { "Content-type": "application/x-www-form-urlencoded" })
-    conn.getresponse()
+
 
 #### main function to run the process
 def main():
