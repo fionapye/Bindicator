@@ -10,7 +10,7 @@ import sys
 import platform
 import requests
 import lxml.html
-
+import http.client, urllib
 
 
 # paths between platforms (webscrape and parsing developed in windows)
@@ -206,6 +206,16 @@ def bindicate(binsout):
         #print (f'Bin(s) don\'t need to go out today as it is {get_dayname(gen_today_tomorrow()[0])}')  # user notification
         leds_off()
 
+def pushover():
+    notifications = read_json(os.path.join(gen_wdir(),'notifications','tokens.json'))
+    conn = http.client.HTTPSConnection("api.pushover.net:443")
+    conn.request("POST", "/1/messages.json",
+    urllib.parse.urlencode({
+    "token": notifications.get('app'),
+    "user": notifications.get('user'),
+    "message": "hello world",
+    }), { "Content-type": "application/x-www-form-urlencoded" })
+    conn.getresponse()
 
 #### main function to run the process
 def main():
