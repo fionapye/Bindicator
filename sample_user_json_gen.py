@@ -27,11 +27,15 @@ users = {
         ,"urlpath" : "<add_house_bin_collection_url>"
         , "apptoken" : "<add_bindicator_pushover_app_token>"
         , "usertoken" : "<add_user_pushover_token>"
+        , "notification" : "yes"  # setting for if this user should get push notifications
+        , "bindicate" : "yes"  # setting for if this user should get bindicator lights
         },
     "[user2]" : {"council" : "<add_council_as_in_xpaths>"
         ,"urlpath" : "<add_house_bin_collection_url>"
         , "apptoken" : "<add_bindicator_pushover_app_token>"
         , "usertoken" : "<add_user_pushover_token>"
+        , "notification" : "yes"  
+        , "bindicate" : "no" 
         }
 }
 
