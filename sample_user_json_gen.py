@@ -23,11 +23,13 @@ def write_json (filename, data):
 
 # add your data here
 users = {
-    "<user1>" : {"urlpath":"<add_house_bin_collection_url>"
+    "<user1>" : {"council" : "<add_council_as_in_xpaths>"
+        ,"urlpath":"<add_house_bin_collection_url>"
         , "app" : "<add_bindicator_pushover_app_token>"
         , "user" : "<add_user_pushover_token>"
         },
-    "[user2]" : {"urlpath":"<add_house_bin_collection_url>"
+    "[user2]" : {"council" : "<add_council_as_in_xpaths>"
+        ,"urlpath" : "<add_house_bin_collection_url>"
         , "app" : "<add_bindicator_pushover_app_token>"
         , "user" : "<add_user_pushover_token>"
         }
