@@ -28,6 +28,7 @@ def read_json (path):
         data = json.load(json_file)  # given a path to a json file, load into dictionary
     return data
 
+
 # push notifications
 def pushover(message):
     notifications = read_json(os.path.join(gen_wdir(),'notifications','tokens.json'))
@@ -120,16 +121,12 @@ def bins_out (bindays):
         #print(type[1][1])
         bintype = type[0]  # from the scraped data, get the bin type
         binday = type[1][1]  # associated bin days
-#temp for testing        today_date, tomorrow_date = gen_today_tomorrow()
         today_date, tomorrow_date = gen_today_tomorrow()
         if binday: 
             if tomorrow_date == binday:  # if a bin type will be collected tomorrow
                 data = [bintype,binday]
                 typeout.append(data)  # append the bin data
                 print(f'{bintype.title()} bin(s) to go out today as tomorrow is {get_dayname(tomorrow_date)}')  # user notification
-                # send push message
-                push_message = f'{bintype.title()} bin(s) to go out today as tomorrow is {get_dayname(tomorrow_date)}'
-                pushover(push_message)
             else:
                 print(f'{bintype.title()} bin(s) don\'t need to go out today as it is {get_dayname(today_date)}')  # user notification
         else:
@@ -137,10 +134,27 @@ def bins_out (bindays):
     return typeout
 
 
+# define the push message that is sent
+def notification(typeout):
+    if len(typeout) == 3:
+        pushover(f'{typeout[0][0].title()}, {typeout[1][0].title()} & {typeout[2][0].title()} bins to go out today.')
+    elif len(typeout) == 2:
+        push_message = f'{typeout[0][0].title()} & {typeout[1][0].title()} bins to go out today.'
+        pushover(f'{typeout[0][0].title()} & {typeout[1][0].title()} bins to go out today.')
+        print(push_message)
+    elif len(typeout) == 1:
+        pushover(f'{typeout[0][0].title()} bin(s) to go out today.')
+    else:
+        pass
+
+
 # dates for testing 
 #today_date = datetime.date(2021,9,15)
 #tomorrow_date = datetime.date(2021,9,16)
-#bins_out(get_bindays())
+#bindays = get_bindays()
+#out = bins_out(bindays)
+#notification(out)
+
 
 # function to light up leds individually 
 def one_led (led,col):
@@ -178,6 +192,7 @@ def leds_off():
 #     elif binsout[0][0] == 'green':  # green bin
 #         all_led(bins.get('green')[0])   # light up colours for green
 
+
 def one_bindicate(binsout):
     bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
     if len(binsout) != 1 : return  # if the len condition not met leave function
@@ -208,6 +223,7 @@ def two_bindicate(binsout):
         for ind,col in enumerate(bins.get('green_general')):
             one_led(ind,bins.get('green_general')[ind])    #light up colours for green and general
 
+
 # lights for if three bins to go out
 def three_bindicate(binsout):
     bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
@@ -215,6 +231,7 @@ def three_bindicate(binsout):
     #print('lights')
     for ind,col in enumerate(bins.get('recyc_green_gen')):
         one_led(ind,bins.get('recyc_green_gen')[ind])  #   #light up colours for recycling, green and general
+
 
 # run lights, route based on number required
 def bindicate(binsout):
@@ -239,6 +256,7 @@ def main():
         bindays = get_bindays()  # get the bindays
         binsout = bins_out(bindays)  # get the data for bins to go out
         # light up to show if any bins need to go out
+        notification(binsout)  # send push message
         bindicate(binsout)  # light up for any bins to go out today
         # cleanup
         time.sleep(900)  # stay lit for 15 mins
