@@ -3,6 +3,7 @@ import os
 import json
 import platform
 
+
 # paths between platforms
 if platform.system() == 'Windows':
     wdir = 'D:\\GitHub\\Bindicator'
@@ -11,11 +12,12 @@ elif platform.system() == 'Linux':
 
 
 os.chdir(os.path.join(wdir,'config'))
-#os.chdir("/home/pi/Documents/Bindicator/config")
+
 
 def write_json (filename, data):
     with open(filename, 'w') as outfile:
         json.dump(data, outfile)
+
 
 led_colours = {
     "pink" : {"r":255, "g":0, "b":140, "br":0.1},
@@ -25,6 +27,7 @@ led_colours = {
     "brown" : {"r":25, "g":10, "b":1, "br":0.2},
     "black" : {"r":2, "g":0, "b":2, "br":0.2}
     }
+
 
 bins = {
     "general" : ['brown'],
@@ -36,6 +39,7 @@ bins = {
     "recyc_green_gen" : ['pink','grey','black','blue','brown','brown','green','green']
     }
 
+
 days = {
     "Monday" : 'Mon',
     "Tuesday" : 'Tues',
@@ -46,11 +50,14 @@ days = {
     "Sunday" : 'Sun'
     }
 
+
 xpaths ={
-    'recycling' : '/html/body/div[2]/div/div/form/table/tbody/tr[1]/td[1]/div',
-    'green' : '/html/body/div[2]/div/div/form/table/tbody/tr[2]/td[1]/div',
-    'general' : '/html/body/div[2]/div/div/form/table/tbody/tr[3]/td[1]/div'
-}
+    "st_helens" : {'recycling' : '/html/body/div[2]/div/div/form/table/tbody/tr[1]/td[1]/div',
+                    'green' : '/html/body/div[2]/div/div/form/table/tbody/tr[2]/td[1]/div',
+                    'general' : '/html/body/div[2]/div/div/form/table/tbody/tr[3]/td[1]/div'
+                }
+    }
+
 
 write_json('led_colours.json', led_colours)
 write_json('days.json', days)
