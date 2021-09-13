@@ -91,8 +91,8 @@ def info_extract(user, xpath_value):
 
 # function to get the bindays into a list 
     # council var is read in from user data, used to subset the data to the xpaths for the right website
-def get_bindays(council):
-    xpaths = read_json(os.path.join(gen_wdir(),'config','xpaths.json')).get(council)  # load xpaths for webscrape (maybe merge with urlpage?)
+def get_bindays(user):
+    xpaths = read_json(os.path.join(gen_wdir(),'config','xpaths.json')).get(user.get('council'))  # load xpaths for webscrape (maybe merge with urlpage?)
     bindays = []  # empty list to compile data into
     for type in xpaths:
         print(type)
@@ -150,19 +150,18 @@ def notification(user, typeout):
         pass
 
 
+
 # this bit will need to go in an outer loop
-user_data = read_json(os.path.join(gen_wdir(),'user_config', 'users.json'))
-users = list(user_data.keys())
-user = user_data.get(users[0])
-council = user.get('council')
+#user_data = read_json(os.path.join(gen_wdir(),'user_config', 'users.json'))
+#users = list(user_data.keys())
+#user = user_data.get(users[0])
+#council = user.get('council')
 # dates for testing 
-today_date = datetime.date(2021,9,15)
-tomorrow_date = datetime.date(2021,9,16)
-bindays = get_bindays(council)
-out = bins_out(bindays)
-notification(user,out)
-
-
+##today_date = datetime.date(2021,9,15)
+#tomorrow_date = datetime.date(2021,9,16)
+#bindays = get_bindays(council)
+#out = bins_out(bindays)
+#notification(user,out)
 
 
 
@@ -263,14 +262,25 @@ def main():
     if len(sys.argv) == 1:
         #do run stuff that isnt in demo
         print("Live bindicate")  # user notification
-        bindays = get_bindays()  # get the bindays
-        binsout = bins_out(bindays)  # get the data for bins to go out
-        # light up to show if any bins need to go out
-        notification(binsout)  # send push message
-        bindicate(binsout)  # light up for any bins to go out today
-        # cleanup
-        time.sleep(900)  # stay lit for 15 mins
-        leds_off()  # turn the leds off
+        user_data = read_json(os.path.join(gen_wdir(),'user_config', 'users.json'))
+        users = list(user_data.keys())
+        for user in users:
+            print(f'Checking bindays for {user}')
+            user = user_data.get(user)
+            bindays = get_bindays(user)  # get the bindays
+            binsout = bins_out(bindays)  # get the data for bins to go out
+            # light up to show if any bins need to go out
+            if user.get('notification') == 'yes':
+                notification(user,binsout)  # send push message
+            else:
+                pass
+            if user.get('bindicate') == 'yes':
+                bindicate(binsout)  # light up for any bins to go out today ## adapt bindicate to check if lights for user
+                # cleanup
+                time.sleep(900)  # stay lit for 15 mins
+                leds_off()  # turn the leds off
+            else:
+                pass
         
     #arguments to indicate if demo
     elif len(sys.argv) == 2 and sys.argv[1] == "demo": # if the terminal is given the demo instruction run this 
