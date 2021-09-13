@@ -262,25 +262,27 @@ def main():
     if len(sys.argv) == 1:
         #do run stuff that isnt in demo
         print("Live bindicate")  # user notification
-        user_data = read_json(os.path.join(gen_wdir(),'user_config', 'users.json'))
-        users = list(user_data.keys())
+        users_data = read_json(os.path.join(gen_wdir(),'user_config', 'users.json'))
+        users = list(users_data.keys())
         for user in users:
             print(f'Checking bindays for {user}')
-            user = user_data.get(user)
-            bindays = get_bindays(user)  # get the bindays
+            user_data = users_data.get(user)
+            bindays = get_bindays(user_data)  # get the bindays
             binsout = bins_out(bindays)  # get the data for bins to go out
             # light up to show if any bins need to go out
-            if user.get('notification') == 'yes':
-                notification(user,binsout)  # send push message
+            if user_data.get('notification') == 'yes':
+                notification(user_data,binsout)  # send push message
+                #pushover(user_data,'test') to prove push notifications on non binday
             else:
                 pass
-            if user.get('bindicate') == 'yes':
+            if user_data.get('bindicate') == 'yes':
+                print('bindicate')
                 bindicate(binsout)  # light up for any bins to go out today ## adapt bindicate to check if lights for user
                 # cleanup
                 time.sleep(900)  # stay lit for 15 mins
                 leds_off()  # turn the leds off
             else:
-                pass
+                print('no lights')
         
     #arguments to indicate if demo
     elif len(sys.argv) == 2 and sys.argv[1] == "demo": # if the terminal is given the demo instruction run this 
