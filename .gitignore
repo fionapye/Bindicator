@@ -1,6 +1,7 @@
 #folders
 urlpath/
 notifications/
+user_config/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
