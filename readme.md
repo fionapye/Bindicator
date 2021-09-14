@@ -8,6 +8,7 @@ Upgrade Status
 * Done - push notifications with pushover
 * In progress - allow multiple users to get personalised info
 * To do - add additional council (Knowsley)
+* Add poetry for packages? And/or docker?
 
 Configured for
 * St Helens Council - https://secure.sthelens.net/website/CollectionDates.nsf/servlet.xsp/CollectionDatesMenu
