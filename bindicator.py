@@ -150,21 +150,6 @@ def notification(user, typeout):
         pass
 
 
-
-# this bit will need to go in an outer loop
-#user_data = read_json(os.path.join(gen_wdir(),'user_config', 'users.json'))
-#users = list(user_data.keys())
-#user = user_data.get(users[1])
-#pushover(user, 'test')
-# dates for testing 
-##today_date = datetime.date(2021,9,15)
-#tomorrow_date = datetime.date(2021,9,16)
-#bindays = get_bindays(council)
-#out = bins_out(bindays)
-#notification(user,out)
-
-
-
 # function to light up leds individually 
 def one_led (led,col):
     led_colours = read_json(os.path.join(gen_wdir(),'config','led_colours.json'))  # load colour data (rgb)
@@ -185,21 +170,6 @@ def all_led (col):
 def leds_off():
     blinkt.clear()  # clear all led settings 
     blinkt.show()  # display the configuration (no lights in this case)
-
-
-# lights for one bin to go out
-# def one_bindicate(binsout):
-#     bins = read_json(os.path.join(gen_wdir(),'config','bins.json')) #load bins colour data
-#     if len(binsout) != 1 : return  # if the len condition not met leave function
-#     #print('lights')
-#     blinkt.clear()  # clear any settings for leds
-#     if binsout[0][0] == 'recycling':  # recycling
-#         for ind,col in enumerate(bins.get('recycling')):
-#             one_led(ind,bins.get('recycling')[ind])  # light up colours for recycling
-#     elif binsout[0][0] == 'general':  # general bin
-#         all_led(bins.get('general')[0])   # light up colours for general
-#     elif binsout[0][0] == 'green':  # green bin
-#         all_led(bins.get('green')[0])   # light up colours for green
 
 
 def one_bindicate(binsout):
