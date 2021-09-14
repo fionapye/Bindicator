@@ -8,7 +8,7 @@ Upgrade Status
 * Done - push notifications with pushover
 * In progress - allow multiple users to get personalised info
 * To do - add additional council (Knowsley)
-* Add options for user to choose notification time?
+* Add options for user to choose notification time? --> put user as input var into python, different cron job per user?
 * Add poetry for packages? And/or docker?
 
 Configured for
