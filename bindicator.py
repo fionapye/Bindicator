@@ -154,8 +154,8 @@ def notification(user, typeout):
 # this bit will need to go in an outer loop
 #user_data = read_json(os.path.join(gen_wdir(),'user_config', 'users.json'))
 #users = list(user_data.keys())
-#user = user_data.get(users[0])
-#council = user.get('council')
+#user = user_data.get(users[1])
+#pushover(user, 'test')
 # dates for testing 
 ##today_date = datetime.date(2021,9,15)
 #tomorrow_date = datetime.date(2021,9,16)
