@@ -8,6 +8,7 @@ Upgrade Status
 * Done - push notifications with pushover
 * In progress - allow multiple users to get personalised info
 * To do - add additional council (Knowsley)
+* Add options for user to choose notification time?
 * Add poetry for packages? And/or docker?
 
 Configured for
@@ -22,7 +23,7 @@ Webscraping tutorial - https://timber.io/blog/an-intro-to-web-scraping-with-lxml
 
 Automate bindicator (run at certain times)
 * allow file to be executable from shell https://www.codementor.io/@gergelykovcs/how-to-run-and-schedule-python-scripts-on-raspberry-pi-n2clhe3kp
-* add file execution via cron https://garyhall.org.uk/troubleshooting-cron-raspberry-pi.html
+* add file execution via cron https://garyhall.org.uk/troubleshooting-cron-raspberry-pi.html --> this page is 404ing
 
 Push Notifications with Pushover
 https://pushover.net/
