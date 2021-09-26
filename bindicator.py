@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import blinkt
+
 import datetime
 import time
 from time import strptime
@@ -19,6 +19,7 @@ def gen_wdir():
         wdir = 'D:\\GitHub\\Bindicator'  # working directory for windows
     elif platform.system() == 'Linux':
         wdir = '/home/pi/Documents/Bindicator'  # working directory for linux (rasperian)
+        import blinkt
     return wdir
 
 
@@ -149,12 +150,12 @@ def notification(user, typeout):
         #push_message = f'{typeout[0][0].title()} & {typeout[1][0].title()} bins to go out today.'
         #pushover(user, f'{typeout[0][0].title()} & {typeout[1][0].title()} bins to go out today.')
         #print(push_message)
-        pushover(user, 'test3')
+        pushover(user, 'test2')
     elif len(typeout) == 1:
         #pushover(user, f'{typeout[0][0].title()} bin(s) to go out today.')
-        pushover(user, 'test3')
+        pushover(user, 'test1')
     else:
-        pushover(user, 'test3')
+        pushover(user, 'test0')
         #pass
 
 
@@ -253,7 +254,7 @@ def main():
                 #pushover(user_data,'test') to prove push notifications on non binday
             else:
                 pass
-            if user_data.get('bindicate') == 'yes':
+            if user_data.get('bindicate') == 'yes' and platform.system() == 'Linux':
                 print('bindicate')
                 bindicate(binsout)  # light up for any bins to go out today ## adapt bindicate to check if lights for user
                 # cleanup
