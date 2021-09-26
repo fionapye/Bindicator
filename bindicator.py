@@ -141,15 +141,21 @@ def bins_out (bindays):
 # define the push message that is sent
 def notification(user, typeout):
     if len(typeout) == 3:
-        pushover(user, f'{typeout[0][0].title()}, {typeout[1][0].title()} & {typeout[2][0].title()} bins to go out today.')
+        pushover(user, 'test3')
+        #push_message = f'{typeout[0][0].title()}, {typeout[1][0].title()} & {typeout[2][0].title()} bins to go out today.'
+        #pushover(user, f'{typeout[0][0].title()}, {typeout[1][0].title()} & {typeout[2][0].title()} bins to go out today.')
+        #pushover(user, push_message)
     elif len(typeout) == 2:
-        push_message = f'{typeout[0][0].title()} & {typeout[1][0].title()} bins to go out today.'
-        pushover(user, f'{typeout[0][0].title()} & {typeout[1][0].title()} bins to go out today.')
-        print(push_message)
+        #push_message = f'{typeout[0][0].title()} & {typeout[1][0].title()} bins to go out today.'
+        #pushover(user, f'{typeout[0][0].title()} & {typeout[1][0].title()} bins to go out today.')
+        #print(push_message)
+        pushover(user, 'test3')
     elif len(typeout) == 1:
-        pushover(user, f'{typeout[0][0].title()} bin(s) to go out today.')
+        #pushover(user, f'{typeout[0][0].title()} bin(s) to go out today.')
+        pushover(user, 'test3')
     else:
-        pass
+        pushover(user, 'test3')
+        #pass
 
 
 # function to light up leds individually 
