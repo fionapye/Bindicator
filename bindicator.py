@@ -128,11 +128,13 @@ def bins_out (bindays):
             if tomorrow_date == binday:  # if a bin type will be collected tomorrow
                 data = [bintype,binday]
                 typeout.append(data)  # append the bin data
-                print(f'{bintype.title()} bin(s) to go out today as tomorrow is {get_dayname(tomorrow_date)}')  # user notification
+                #print(f'{bintype.title()} bin(s) to go out today as tomorrow is {get_dayname(tomorrow_date)}')  # user notification
             else:
-                print(f'{bintype.title()} bin(s) don\'t need to go out today as it is {get_dayname(today_date)}')  # user notification
+                pass
+                #print(f'{bintype.title()} bin(s) don\'t need to go out today as it is {get_dayname(today_date)}')  # user notification
         else:
-            print(f'No data available for the collection of {bintype.title()} bin(s)')  # user notification
+            pass
+            #print(f'No data available for the collection of {bintype.title()} bin(s)')  # user notification
     return typeout
 
 
