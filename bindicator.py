@@ -11,6 +11,7 @@ import platform
 import requests
 import lxml.html
 import http.client, urllib
+import blinkt
 
 
 # paths between platforms (webscrape and parsing developed in windows)
@@ -19,7 +20,8 @@ def gen_wdir():
         wdir = 'D:\\GitHub\\Bindicator'  # working directory for windows
     elif platform.system() == 'Linux':
         wdir = '/home/pi/Documents/Bindicator'  # working directory for linux (rasperian)
-        import blinkt
+    else:
+        print('unknown platform')
     return wdir
 
 
@@ -142,21 +144,24 @@ def bins_out (bindays):
 # define the push message that is sent
 def notification(user, typeout):
     if len(typeout) == 3:
-        pushover(user, 'test3')
-        #push_message = f'{typeout[0][0].title()}, {typeout[1][0].title()} & {typeout[2][0].title()} bins to go out today.'
+        #pushover(user, 'test3')
+        push_message = f'{typeout[0][0].title()}, {typeout[1][0].title()} & {typeout[2][0].title()} bins to go out today.'
         #pushover(user, f'{typeout[0][0].title()}, {typeout[1][0].title()} & {typeout[2][0].title()} bins to go out today.')
-        #pushover(user, push_message)
+        pushover(user, push_message)
+        print(push_message)
     elif len(typeout) == 2:
-        #push_message = f'{typeout[0][0].title()} & {typeout[1][0].title()} bins to go out today.'
+        push_message = f'{typeout[0][0].title()} & {typeout[1][0].title()} bins to go out today.'
         #pushover(user, f'{typeout[0][0].title()} & {typeout[1][0].title()} bins to go out today.')
-        #print(push_message)
-        pushover(user, 'test2')
+        pushover(user, push_message)
+        print(push_message)
+        #pushover(user, 'test2')
     elif len(typeout) == 1:
-        #pushover(user, f'{typeout[0][0].title()} bin(s) to go out today.')
-        pushover(user, 'test1')
+        push_message = f'{typeout[0][0].title()} bin(s) to go out today.'
+        pushover(user, push_message)
+        print(push_message)
     else:
-        pushover(user, 'test0')
-        #pass
+        #pushover(user, 'test0')
+        pass
 
 
 # function to light up leds individually 
@@ -190,7 +195,8 @@ def one_bindicate(binsout):
         for ind,col in enumerate(bins.get(binsout[0][0])):
             one_led(ind,bins.get(binsout[0][0])[ind])  # light up colours for recycling
     else:
-        print(f'{binsout[0][0]} is an unconfigured type')
+        #print(f'{binsout[0][0]} is an unconfigured type')
+        pass
 
 
 # lights if two bins to go out
@@ -307,6 +313,16 @@ def main():
         bindicate(binsout_three)
         time.sleep(5)
         leds_off()
+        
+        #show notification functionality
+        users_data = read_json(os.path.join(gen_wdir(),'user_config', 'users_test.json'))
+        users = list(users_data.keys())
+        for user in users:
+            print(f'Checking bindays for {user}')
+            user_data = users_data.get(user)
+            if user_data.get('notification') == 'yes':
+                notification(user_data,'Push message to notify of bin collection')  # send push message
+        
     else:
         print("Unknown command for bindicator")
         
