@@ -274,46 +274,49 @@ def main():
         #demo stuff that overlaps with run
         print("Bindicate demo")
 
-        tomorrow_date = gen_today_tomorrow()[1]  # generate day data
+        if platform.system() == 'Linux':
+            tomorrow_date = gen_today_tomorrow()[1]  # generate day data
 
-        # Data for demo
-        binsout_recy = [['recycling', tomorrow_date]]
-        binsout_gen = [['general', tomorrow_date]]
-        binsout_green = [['green', tomorrow_date]]
-        binsout_two_a = [['recycling', tomorrow_date], ['green', tomorrow_date]]
-        binsout_two_b = [['recycling', tomorrow_date], ['general', tomorrow_date]]
-        binsout_two_c = [['green', tomorrow_date], ['general', tomorrow_date]]
-        binsout_three = [['recycling', tomorrow_date], ['green', tomorrow_date], ['general', tomorrow_date] ]
+            # Data for demo
+            binsout_recy = [['recycling', tomorrow_date]]
+            binsout_gen = [['general', tomorrow_date]]
+            binsout_green = [['green', tomorrow_date]]
+            binsout_two_a = [['recycling', tomorrow_date], ['green', tomorrow_date]]
+            binsout_two_b = [['recycling', tomorrow_date], ['general', tomorrow_date]]
+            binsout_two_c = [['green', tomorrow_date], ['general', tomorrow_date]]
+            binsout_three = [['recycling', tomorrow_date], ['green', tomorrow_date], ['general', tomorrow_date] ]
 
-        print("Colour code for recycling")
-        bindicate(binsout_recy)
-        time.sleep(5)
-        
-        print("Colour code for general")
-        bindicate(binsout_gen)
-        time.sleep(5)
-        
-        print("Colour code for recycling")
-        bindicate(binsout_green)
-        time.sleep(5)
-        
-        print("Colour code for recycling and green")
-        bindicate(binsout_two_a)
-        time.sleep(5)
-        
-        print("Colour code for recycling and general")
-        bindicate(binsout_two_b)
-        time.sleep(5)
-        
-        print("Colour code for green and general")
-        bindicate(binsout_two_c)
-        time.sleep(5)
-        
-        print("Colour code for recycling, green and general")
-        bindicate(binsout_three)
-        time.sleep(5)
-        leds_off()
-        
+            print("Colour code for recycling")
+            bindicate(binsout_recy)
+            time.sleep(5)
+            
+            print("Colour code for general")
+            bindicate(binsout_gen)
+            time.sleep(5)
+            
+            print("Colour code for recycling")
+            bindicate(binsout_green)
+            time.sleep(5)
+            
+            print("Colour code for recycling and green")
+            bindicate(binsout_two_a)
+            time.sleep(5)
+            
+            print("Colour code for recycling and general")
+            bindicate(binsout_two_b)
+            time.sleep(5)
+            
+            print("Colour code for green and general")
+            bindicate(binsout_two_c)
+            time.sleep(5)
+            
+            print("Colour code for recycling, green and general")
+            bindicate(binsout_three)
+            time.sleep(5)
+            leds_off()
+            
+        else:
+            pass
         #show notification functionality
         users_data = read_json(os.path.join(gen_wdir(),'user_config', 'users_test.json'))
         users = list(users_data.keys())
